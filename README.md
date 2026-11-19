@@ -1,5 +1,8 @@
 # dsh-sweeper
 
+[![CI](https://github.com/Dushiqi1987/dsh-sweeper/actions/workflows/ci.yml/badge.svg)](https://github.com/Dushiqi1987/dsh-sweeper/actions/workflows/ci.yml)
+[![license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
 静态扫描历史会话里的工具产物，分两档展示；你自己勾选，点「清理选中」批量移到插件回收站，可随时恢复。
 
 ## 怎么用
@@ -120,7 +123,24 @@ K x44          → 留着
 
 ## 自测
 
+仓库自带两套检查，`git push` 后由 GitHub Actions 在 **Node 14.21.3 / 20 / 22** 三个版本上跑：
+
 ```bash
-cd uitest && npm i && node harness.js   # 11 个 UI 状态的 SSR 冒烟
+node --check lib/*.js test/harness.js scripts/selfcheck.mjs   # 语法
+node scripts/selfcheck.mjs                                    # 清单 + 补丁 + 语言文件
+
+cd test && npm install && npm test                            # 12 个 UI 状态的 SSR 冒烟
+```
+
+`selfcheck` 检查的是商店和 `dsh plugin add` 真正会看的东西：`dsh.bundle.patch` 存在、`cordis.patch.yml` 里有 `insert` 且有 `id`/`name`（且 `name` 等于包名）、`exports` 与 `files` 里的路径都真实存在、两份 locale 都有 `meta.title` 与 `meta.description`。任何一个不满足就退出码非 0。
+
+CI 里还有一步 `npm pack` 后检查 tarball 里确实有 `package/cordis.patch.yml` —— 这一条最容易在「本地能装、发出去装不上」时踩到。
+
+Node 14 是特意留着的：宿主运行时就是 `v14.21.3`，插件在这上面必须能 `import`（`node:` 前缀、`??=`、可选链这些都不能越界）。
+
+额外的手工预览（不在 CI 里，需要本机装过 DSH）：
+
+```bash
+cd uitest && npm i && node harness.js   # 同 test/，路径指向本仓库
 node preview.js                         # 生成 ../preview.html 静态预览
 ```

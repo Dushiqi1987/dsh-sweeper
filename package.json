@@ -1,0 +1,55 @@
+{
+  "name": "dsh-sweeper",
+  "version": "1.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Report-only audit of artifacts left behind by tool execution in DSH sessions",
+  "keywords": [
+    "deepseek",
+    "deepseek-harness",
+    "dsh",
+    "dsh-plugin",
+    "cleanup",
+    "garbage-collector",
+    "disk-space",
+    "audit"
+  ],
+  "license": "MIT",
+  "author": "Dushiqi1987",
+  "homepage": "https://github.com/Dushiqi1987/dsh-sweeper#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Dushiqi1987/dsh-sweeper.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Dushiqi1987/dsh-sweeper/issues"
+  },
+  "exports": {
+    ".": "./lib/index.js",
+    "./client": "./lib/client.js",
+    "./locale/*.json": "./locale/*.json",
+    "./icon": "./icon.svg",
+    "./package.json": "./package.json",
+    "./cordis.patch.yml": "./cordis.patch.yml"
+  },
+  "files": [
+    "lib",
+    "icon.svg",
+    "locale",
+    "cordis.patch.yml",
+    "README.md",
+    "LICENSE"
+  ],
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web",
+      "inject": [
+        "@deepseek-ai/dsh-client-ui-renderer",
+        "@deepseek-ai/dsh-client-locale"
+      ]
+    }
+  }
+}

@@ -143,6 +143,8 @@ const cases = [
   ['deepDone', { status: 'ready', report, tab: 'deep', deepPlan, deepJob: { ...deepJob, state: 'done', totals: { ...deepJob.totals, done: 3, candidates: 33 } } }],
   ['deepErr2', { status: 'ready', report, tab: 'deep', deepPlan, deepErr: 'model is not configured' }],
   ['deepDialog', { status: 'ready', report, tab: 'deep', deepPlan, deepJob, dialog: { kind: 'deepDelete', keys: ['dk1', 'dk3'], count: 2, bytes: 8912, unsure: 1 } }],
+  ['deepSkip', { status: 'ready', report, tab: 'deep', deepPlan: { week: 7, concurrency: 4, totalEstTokens: 0, skipped: 9, sessions: [] } }],
+  ['deepSkip2', { status: 'ready', report, tab: 'deep', deepPlan: { ...deepPlan, skipped: 9 } }],
 ]
 
 let failed = 0

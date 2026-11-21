@@ -118,6 +118,16 @@ check('failed conversation does not stop the pool', (() => {
   const boom = { get: (n) => (n === 'llm' ? { prepareCall: async () => { throw new Error('no route') } } : null) }
   return runDeep(boom, [sessions[0]], { concurrency: 1 }).then((r) => r.results.get('a').ok === false)
 })())
+check('workspace registry resolves a session to its folder', (() => {
+  const map = _internal.workspaceIndex()
+  if (!(map instanceof Map)) return false
+  for (const [sid, dir] of map) {
+    if (!sid.startsWith('session-')) return false
+    if (typeof dir !== 'string' || !dir) return false
+  }
+  return true
+})())
+
 check('_internal exposes the pieces the host uses', typeof _internal.describeSession === 'function' && typeof _internal.candidatesOf === 'function')
 
 console.log(fails.length ? '\nFAIL\n- ' + fails.join('\n- ') : '\ndeep pass OK')

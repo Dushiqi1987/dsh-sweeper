@@ -128,6 +128,27 @@ check('workspace registry resolves a session to its folder', (() => {
   return true
 })())
 
+// Cancelling must stop dispatching: the queued conversations never reach the model.
+const pooled = await new Promise((resolve) => {
+  const ac = new AbortController()
+  const started = []
+  const done = []
+  _internal.runPool([1, 2, 3, 4, 5, 6].map((id) => ({ id: 'j' + id })), {
+    concurrency: 2,
+    isStopped: () => ac.signal.aborted,
+    run: async (job) => {
+      started.push(job.id)
+      await new Promise((r) => setTimeout(r, 120))
+      done.push(job.id)
+      return { ok: true }
+    },
+    onResult: async () => {},
+  }).then(resolve)
+  setTimeout(() => ac.abort(), 60)
+})
+check('cancelling stops the pool from dispatching', pooled.cancelled === 4, 'cancelled=' + pooled.cancelled)
+check('cancelling still lets the in-flight calls finish', pooled.results.size === 2, 'results=' + pooled.results.size)
+
 check('_internal exposes the pieces the host uses', typeof _internal.describeSession === 'function' && typeof _internal.candidatesOf === 'function')
 
 console.log(fails.length ? '\nFAIL\n- ' + fails.join('\n- ') : '\ndeep pass OK')

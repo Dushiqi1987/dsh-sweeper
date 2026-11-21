@@ -1,9 +1,13 @@
-// Tiny replay server: serves the real client bundle plus a staged fake API.
+// Tiny replay server: serves the real client bundle plus a fake API.
 // Purpose: render the actual settings page in a real browser and watch
 // "whoever returns first updates first" without touching the real DSH host.
+//
+//   node test/browser/server.mjs              # synthetic payload (deterministic staging)
+//   REAL=1 node test/browser/server.mjs       # replay the last on-disk selftest capture
 import http from 'node:http'
 import { readFile } from 'node:fs/promises'
 import { fileURLToPath } from 'node:url'
+import os from 'node:os'
 import path from 'node:path'
 
 const here = path.dirname(fileURLToPath(import.meta.url))
@@ -57,14 +61,51 @@ const SWEEP = [
   ITEM('C:\\Users\\demo\\Desktop\\iccv\\tmp\\plot_ablation.py', 2210, 20),
 ]
 
+// ── optional: replay the last capture written by the in-host selftest ──────
+let REAL = null
+if (process.env.REAL) {
+  try {
+    const raw = await readFile(path.join(os.homedir(), '.dsh', 'plugin-data', 'dsh-sweeper', 'selftest-out.json'), 'utf8')
+    REAL = JSON.parse(raw).deep || null
+  } catch (e) {
+    console.error('REAL=1 but no capture:', e.message)
+  }
+}
+
+const realSessions = REAL ? REAL.sessions.map(s => ({
+  id: s.id, title: s.title, cwd: s.cwd, ageDays: s.ageDays,
+  toolCalls: s.toolCalls, candidates: s.candidates, estTokens: s.estTokens,
+})) : []
+
 let start = 0
 let polls = 0
-const JOB = () => ({ running: start > 0, elapsed: start ? Date.now() - start : 0 })
 
 function status() {
   polls += 1
   const el = polls * 900
-  // the pool returns out of order on purpose: session 2 first, then 3, then 1
+
+  if (REAL) {
+    // one real conversation: keep the row queued for two polls so the
+    // "whoever returns first" progression is still visible, then reveal the
+    // model's own verdicts one item per poll.
+    const sessions = REAL.sessions.map(s => polls < 2
+      ? { ...s, status: 'queued', ms: 0, found: 0 }
+      : { ...s, status: 'done', ms: s.ms || 7778, found: s.candidates })
+    // verdicts land one per poll, so the page shows the model's own list grow
+    const revealed = Math.max(0, Math.min(REAL.sweep.length, polls - 1))
+    const finished = polls >= REAL.sweep.length + 2
+    return {
+      id: REAL.id, state: finished ? 'done' : 'running', startedAt: start || Date.now(),
+      ms: REAL.ms, week: REAL.week, concurrency: REAL.concurrency, model: REAL.model,
+      totals: { ...REAL.totals, done: finished ? 1 : 0, ms: el },
+      sessions,
+      sweep: REAL.sweep.slice(0, revealed),
+      optional: REAL.optional || [],
+      rejected: (REAL.rejected || []).slice(0, revealed ? undefined : 0),
+    }
+  }
+
+  // synthetic mode: the pool returns out of order on purpose (2 → 3 → 1)
   const doneAt = [4, 2, 3]
   const sessions = SESSIONS.map((s, i) => {
     const done = polls >= doneAt[i]
@@ -107,14 +148,15 @@ const server = http.createServer(async (req, res) => {
   if (p === '/plugins/dsh-sweeper/report') return json(res, 200, REPORT)
   if (p === '/plugins/dsh-sweeper/trash') return json(res, 200, { root: REPORT.trashRoot, batches: [] })
   if (p === '/plugins/dsh-sweeper/deep/plan') {
-    return json(res, 200, {
-      sessions: start ? SESSIONS : SESSIONS, skipped: 9, week: 7, concurrency: 4,
-      totalEstTokens: 2814,
-    })
+    const sessions = REAL ? realSessions : SESSIONS
+    const totalEstTokens = sessions.reduce((n, s) => n + (s.estTokens || 0), 0)
+    return json(res, 200, { sessions, skipped: 9, week: 7, concurrency: REAL ? REAL.concurrency : 4, totalEstTokens })
   }
   if (p === '/plugins/dsh-sweeper/deep/start' && req.method === 'POST') {
     start = Date.now(); polls = 0
-    return json(res, 202, { jobId: 'job-harness', sessions: SESSIONS.length, estTokens: 2814, concurrency: 4 })
+    const n = REAL ? realSessions.length : SESSIONS.length
+    const est = (REAL ? realSessions : SESSIONS).reduce((a, s) => a + (s.estTokens || 0), 0)
+    return json(res, 202, { jobId: 'job-harness', sessions: n, estTokens: est, concurrency: 4 })
   }
   if (p === '/plugins/dsh-sweeper/deep/status') return json(res, 200, { job: start ? status() : null })
   if (p === '/plugins/dsh-sweeper/deep/cancel') return json(res, 200, { ok: true })
@@ -123,4 +165,4 @@ const server = http.createServer(async (req, res) => {
 })
 
 const port = Number(process.env.PORT || 8731)
-server.listen(port, '127.0.0.1', () => console.log('ready http://127.0.0.1:' + port + '/'))
+server.listen(port, '127.0.0.1', () => console.log('ready http://127.0.0.1:' + port + '/' + (REAL ? ' (real capture)' : '')))

@@ -190,3 +190,11 @@ chrome --headless=new --hide-scrollbars --window-size=1180,1600 \
 ```
 
 `?stop=` 是让页面自动点按钮的时长（毫秒），假后端按**轮询次数**推进：第 2 次轮询第 2 段完成、第 3 次第 3 段、第 4 次第 1 段——所以截图里三段分别是 1.5s / 1.9s / 2.3s 完成，而不是最后一起变。它只用于开发验证，不发布、不进 CI。
+
+**回放真实模型输出**：加 `REAL=1`，服务器改读 `~/.dsh/plugin-data/dsh-sweeper/selftest-out.json` 里那次真实自测的 `deep` 结果，页面看到的就是模型当时的原话和理由：
+
+```bash
+REAL=1 PORT=8737 node test/browser/server.mjs
+```
+
+判定结果按轮询逐个放出来，所以能同时看到「会话已完成、候选一条条冒出来」的过程，而不是一次刷出全部。

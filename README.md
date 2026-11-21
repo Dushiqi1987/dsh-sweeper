@@ -176,3 +176,17 @@ echo '{"go":true}' > "$HOME/.dsh/plugin-data/dsh-sweeper/selftest.json"
 cd uitest && npm i && node harness.js   # 同 test/，路径指向本仓库
 node preview.js                         # 生成 ../preview.html 静态预览
 ```
+
+### 真浏览器回放（test/browser）
+
+SSR 冒烟只能证明「组件拿到这份 JSON 不会崩」。要看真实浏览器里**先返回先显示**的动效，用这一套：它起一个本地假后端（数据形状与真实接口一致），加载**真实的 `lib/client.js`**，然后用无头浏览器点开「深度清理」页签、勾同意、点开始，再把几个时刻截下来。
+
+```bash
+node test/browser/server.mjs                 # http://127.0.0.1:8731/
+# 另开一个终端：
+chrome --headless=new --hide-scrollbars --window-size=1180,1600 \
+  --virtual-time-budget=20000 --screenshot=done.png \
+  "http://127.0.0.1:8731/?stop=16000"
+```
+
+`?stop=` 是让页面自动点按钮的时长（毫秒），假后端按**轮询次数**推进：第 2 次轮询第 2 段完成、第 3 次第 3 段、第 4 次第 1 段——所以截图里三段分别是 1.5s / 1.9s / 2.3s 完成，而不是最后一起变。它只用于开发验证，不发布、不进 CI。

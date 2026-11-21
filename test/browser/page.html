@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<title>dsh-sweeper · browser harness</title>
+<style>
+  :root{
+    --dsw-alias-label-primary:#e8eaed; --dsw-alias-label-secondary:#a8b0ba; --dsw-alias-label-tertiary:#7d8590;
+    --dsw-alias-label-primary-foreground:#0d1117;
+    --dsw-alias-border-l2:rgba(255,255,255,.13); --dsw-alias-border-l3:rgba(255,255,255,.24);
+    --dsw-alias-bg-layer-1:rgba(255,255,255,.045); --dsw-alias-bg-layer-2:rgba(255,255,255,.075);
+    --dsw-alias-interactive-bg-hover:rgba(255,255,255,.08); --dsw-alias-bg-overlay:#1b1d21;
+    --dsw-alias-button-primary-fill:#4c8dff;
+    --dsw-alias-state-success-primary:#3fb950; --dsw-alias-state-warning-secondary:#d29922; --dsw-alias-state-error-primary:#f85149;
+    color-scheme: dark;
+  }
+  html,body{margin:0;height:100%;background:#0f1115;color:var(--dsw-alias-label-primary);
+    font-family:"Segoe UI","Microsoft YaHei UI",system-ui,sans-serif}
+  .shell{display:grid;grid-template-columns:236px 1fr;height:100%}
+  .nav{border-right:1px solid var(--dsw-alias-border-l2);padding:18px 10px;background:#12141a}
+  .nav h4{margin:6px 10px 10px;font-size:12px;font-weight:600;color:var(--dsw-alias-label-tertiary);letter-spacing:.04em}
+  .nav a{display:flex;gap:8px;align-items:center;margin:2px 0;padding:8px 10px;border-radius:8px;
+    font-size:13px;color:var(--dsw-alias-label-secondary);text-decoration:none}
+  .nav a[data-on]{background:var(--dsw-alias-bg-layer-2);color:var(--dsw-alias-label-primary);font-weight:600}
+  main{padding:26px 30px;overflow:auto}
+  #boot{color:#7d8590;font-size:12px}
+</style>
+</head>
+<body>
+<div class="shell">
+  <nav class="nav">
+    <h4>设置</h4>
+    <a href="#">通用</a>
+    <a href="#">模型</a>
+    <a href="#">插件</a>
+    <a href="#" data-on>清理对话垃圾</a>
+    <a href="#">远程</a>
+  </nav>
+  <main><div id="boot">loading client bundle…</div><div id="root"></div></main>
+</div>
+
+<script src="/react.js"></script>
+<script src="/react-dom.js"></script>
+<script>
+  window.__ModuleLoader__ = { load(def) { window.__dshModule = def } }
+</script>
+<script src="/client.js"></script>
+<script>
+  const params = new URLSearchParams(location.search)
+  const stopAt = Number(params.get('stop') || 0)
+
+  function boot() {
+    const def = window.__dshModule
+    if (!def) { document.getElementById('boot').textContent = 'client bundle did not register'; return }
+
+    const React = window.React
+    const mod = def.factory((name) => {
+      if (name === 'react') return React
+      throw new Error('harness cannot resolve ' + name)
+    })
+
+    let Component = null
+    const registrations = []
+    const ctx = {
+      slots: {
+        inject(_name, cb) { cb() },
+        register(spec, component) {
+          registrations.push(spec.id + ':' + spec.name)
+          if (spec.name === 'settings.section') Component = component
+          return { dispose() {} }
+        },
+      },
+    }
+    mod.apply(ctx)
+    window.__registrations = registrations
+
+    const root = ReactDOM.createRoot(document.getElementById('root'))
+    root.render(React.createElement(Component))
+    document.getElementById('boot').textContent = 'registered: ' + registrations.join(', ')
+
+    if (stopAt) autoDrive(stopAt)
+  }
+
+  // ── drive the page the way a user would ──────────────────────────────────
+  const tick = (ms) => new Promise(r => setTimeout(r, ms))
+  const buttons = () => Array.from(document.querySelectorAll('button'))
+  const byText = (t) => buttons().find(b => (b.textContent || '').includes(t))
+  async function waitFor(fn, ms = 8000) {
+    const end = Date.now() + ms
+    while (Date.now() < end) {
+      const v = fn()
+      if (v) return v
+      await tick(80)
+    }
+    return null
+  }
+
+  async function autoDrive(budget) {
+    const deadline = Date.now() + budget
+    const tab = await waitFor(() => byText('深度清理'))
+    if (tab) { tab.click(); window.__step = 'opened deep tab' } else { window.__step = 'deep tab missing'; return }
+    await tick(500)
+
+    const box = await waitFor(() => document.querySelector('input[type=checkbox]'))
+    if (box && !box.checked) { box.click(); window.__step = 'ticked consent' }
+    await tick(250)
+
+    const start = await waitFor(() => byText('开始分析') || byText('让模型'))
+    if (start) { start.click(); window.__step = 'started analysis' }
+
+    while (Date.now() < deadline) await tick(150)
+    window.__step = 'settled'
+  }
+
+  boot()
+</script>
+</body>
+</html>

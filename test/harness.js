@@ -32,6 +32,12 @@ const swaps = [
   ['const [review, setReview] = useState(null)', `const [review, setReview] = useState(${seed('review', 'null')})`],
   ['const [reviewing, setReviewing] = useState(false)', `const [reviewing, setReviewing] = useState(${seed('reviewing', 'false')})`],
   ['const [reviewErr, setReviewErr] = useState(null)', `const [reviewErr, setReviewErr] = useState(${seed('reviewErr', 'null')})`],
+  ['const [deepPlan, setDeepPlan] = useState(null)', `const [deepPlan, setDeepPlan] = useState(${seed('deepPlan', 'null')})`],
+  ['const [deepJob, setDeepJob] = useState(null)', `const [deepJob, setDeepJob] = useState(${seed('deepJob', 'null')})`],
+  ['const [deepPlanning, setDeepPlanning] = useState(false)', `const [deepPlanning, setDeepPlanning] = useState(${seed('deepPlanning', 'false')})`],
+  ['const [deepConsent, setDeepConsent] = useState(false)', `const [deepConsent, setDeepConsent] = useState(${seed('deepConsent', 'false')})`],
+  ['const [deepErr, setDeepErr] = useState(null)', `const [deepErr, setDeepErr] = useState(${seed('deepErr', 'null')})`],
+  ['const [deepSel, setDeepSel] = useState(() => new Set())', `const [deepSel, setDeepSel] = useState(${seed('deepSelected', 'new Set()')})`],
 ]
 for (const [a, b] of swaps) {
   if (!src.includes(a)) throw new Error('seed anchor missing: ' + a)
@@ -88,6 +94,36 @@ const review = {
 }
 const trash = { root: report.trashRoot, batches: [{ id: 'mwm3flop-pekl0l', createdAt: now - 5000, count: 3, bytes: 167000, note: 'model review' }] }
 
+const deepRow = (i, o) => Object.assign({
+  key: 'dk' + i, path: 'D:\\OpenFuture\\.scratch\\deep-' + i + '.py', tier: 'safe', kind: 'scratch',
+  size: 3000 + i * 991, ageDays: 12 + i, refs: 0, uses: 0, failed: false,
+  reasons: ['模型判断：临时脚本，摘要里没提要留'], origin: 'deep', session: { id: 'sess-' + i, title: '重构抓取脚本 ' + i },
+}, o || {})
+const deepSweep = [deepRow(1), deepRow(2, { path: 'C:\\Users\\x\\AppData\\Local\\Temp\\dsh-spill-zz\\session-9\\a-web_fetch.txt', kind: 'spill', size: 88213 })]
+const deepOptional = [
+  deepRow(3, { tier: 'unsure', path: 'D:\\OpenFuture\\.scratch\\launch.ps1', reasons: ['模型判断：像启动脚本，可能还要用'] }),
+  deepRow(4, { tier: 'unsure', path: 'D:\\OpenFuture\\.scratch\\notes\\plan.md', size: 5120, reasons: ['模型判断：笔记文件，不确定'] }),
+]
+const deepPlan = {
+  week: 7, concurrency: 4, totalEstTokens: 24180,
+  sessions: [
+    { id: 'sess-1', title: '重构抓取脚本', cwd: 'D:\\OpenFuture', ageDays: 12, toolCalls: 288, candidates: 4, estTokens: 9310 },
+    { id: 'sess-2', title: '论文插图批处理', cwd: 'C:\\Users\\x\\Desktop\\iccv', ageDays: 19, toolCalls: 94, candidates: 2, estTokens: 6120 },
+    { id: 'sess-3', title: '数据清洗脚本', cwd: 'D:\\OpenFuture', ageDays: 31, toolCalls: 402, candidates: 9, estTokens: 8750 },
+  ],
+}
+const deepJob = {
+  id: 'dp-1', state: 'running', startedAt: now - 22000, week: 7, concurrency: 4,
+  model: { provider: 'opencode-go', model: 'deepseek-v4.1-flash' },
+  totals: { sessions: 3, done: 1, failed: 0, candidates: 15, estTokens: 24180, ms: 22000 },
+  sessions: [
+    { id: 'sess-1', title: '重构抓取脚本', cwd: 'D:\\OpenFuture', ageDays: 12, toolCalls: 288, candidates: 4, estTokens: 9310, status: 'done', ms: 6800, found: 3 },
+    { id: 'sess-2', title: '论文插图批处理', cwd: 'C:\\Users\\x\\Desktop\\iccv', ageDays: 19, toolCalls: 94, candidates: 2, estTokens: 6120, status: 'running' },
+    { id: 'sess-3', title: '数据清洗脚本', cwd: 'D:\\OpenFuture', ageDays: 31, toolCalls: 402, candidates: 9, estTokens: 8750, status: 'queued' },
+  ],
+  sweep: deepSweep, optional: deepOptional, rejected: [{ path: 'D:\\OpenFuture\\.scratch\\keep.ts', reason: 'tracked by git' }],
+}
+
 const cases = [
   ['loading', { status: 'loading', report: null }],
   ['ready', { status: 'ready', report }],
@@ -101,6 +137,12 @@ const cases = [
   ['dialog', { status: 'ready', report, dialog: { kind: 'delete', keys: [], count: 3, bytes: 167000, unsure: 1 } }],
   ['purge', { status: 'ready', report, tab: 'trash', trash, dialog: { kind: 'purge', batchId: 'mwm3flop-pekl0l', count: 3, bytes: 167000 } }],
   ['selected', { status: 'ready', report, selected: new Set([items[0].key, items[3].key]) }],
+  ['deepPlan', { status: 'ready', report, tab: 'deep', deepPlan }],
+  ['deepRun', { status: 'ready', report, tab: 'deep', deepPlan, deepJob }],
+  ['deepSel2', { status: 'ready', report, tab: 'deep', deepPlan, deepJob, deepSelected: new Set(['dk3']) }],
+  ['deepDone', { status: 'ready', report, tab: 'deep', deepPlan, deepJob: { ...deepJob, state: 'done', totals: { ...deepJob.totals, done: 3, candidates: 33 } } }],
+  ['deepErr2', { status: 'ready', report, tab: 'deep', deepPlan, deepErr: 'model is not configured' }],
+  ['deepDialog', { status: 'ready', report, tab: 'deep', deepPlan, deepJob, dialog: { kind: 'deepDelete', keys: ['dk1', 'dk3'], count: 2, bytes: 8912, unsure: 1 } }],
 ]
 
 let failed = 0

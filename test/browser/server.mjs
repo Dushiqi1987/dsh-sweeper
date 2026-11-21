@@ -63,10 +63,13 @@ const SWEEP = [
 
 // ── optional: replay the last capture written by the in-host selftest ──────
 let REAL = null
+let REAL_REVIEW = null
 if (process.env.REAL) {
   try {
     const raw = await readFile(path.join(os.homedir(), '.dsh', 'plugin-data', 'dsh-sweeper', 'selftest-out.json'), 'utf8')
-    REAL = JSON.parse(raw).deep || null
+    const cap = JSON.parse(raw)
+    REAL = cap.deep || null
+    REAL_REVIEW = cap.review || null
   } catch (e) {
     console.error('REAL=1 but no capture:', e.message)
   }
@@ -160,6 +163,18 @@ const server = http.createServer(async (req, res) => {
   }
   if (p === '/plugins/dsh-sweeper/deep/status') return json(res, 200, { job: start ? status() : null })
   if (p === '/plugins/dsh-sweeper/deep/cancel') return json(res, 200, { ok: true })
+  if (p === '/plugins/dsh-sweeper/review' && req.method === 'POST') {
+    console.log('review hit', new Date().toISOString(), JSON.stringify(req.headers).slice(0,120))
+    if (process.env.REAL && REAL_REVIEW) return json(res, 200, REAL_REVIEW)
+    return json(res, 200, {
+      model: { provider: 'opencode-go', model: 'deepseek-v4.1-flash' }, ms: 9600,
+      reviewed: REPORT.items.length, skipped: 0, note: 'harness', tiers: REPORT.tiers,
+      auto: REPORT.items.filter(i => i.tier === 'safe').slice(0, 2),
+      asks: REPORT.items.filter(i => i.tier === 'unsure').slice(0, 1),
+      kept: [], unknown: [], failed: [], moved: 0, movedBytes: 0,
+      extra: { sweep: [], optional: [], rejected: [], hints: 0, moved: 0, movedBytes: 0 },
+    })
+  }
 
   res.writeHead(404); res.end(JSON.stringify({ error: 'no route ' + p }))
 })

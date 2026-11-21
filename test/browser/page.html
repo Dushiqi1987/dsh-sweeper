@@ -97,6 +97,22 @@
 
   async function autoDrive(budget) {
     const deadline = Date.now() + budget
+    const mode = new URLSearchParams(location.search).get('mode') || 'deep'
+
+    if (mode === 'review') {
+      const tab = await waitFor(() => byText('模型复核'))
+      if (!tab) { window.__step = 'review tab missing'; return }
+      tab.click(); window.__step = 'opened review tab'
+      await tick(400)
+      const run = await waitFor(() => byText('让模型复核'))
+      if (!run) { window.__step = 'review button missing'; return }
+      run.click(); window.__step = 'ran review'
+      await waitFor(() => byText('模型认为可以无脑删') || byText('模型看完') || byText('待你决定'), budget)
+      while (Date.now() < deadline) await tick(150)
+      window.__step = 'settled'
+      return
+    }
+
     const tab = await waitFor(() => byText('深度清理'))
     if (tab) { tab.click(); window.__step = 'opened deep tab' } else { window.__step = 'deep tab missing'; return }
     await tick(500)

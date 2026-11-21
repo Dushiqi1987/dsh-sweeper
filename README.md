@@ -36,6 +36,8 @@
 
 POST 必须带 `x-dsh-sweeper: 1` 头（跨站请求无法携带自定义头，借此挡掉 CSRF）；`token` 与最近一次扫描绑定，过期或重扫后失效；选中「不确定」项时必须 `acknowledge: true`。
 
+**每个路由在进入处理前都先过 DSH 自己的浏览器信任检查**：优先调 `ctx.connection.requestRejection(req)`（与 `/api` 同一套判定），该服务缺席时退化为 fail-closed 兜底——`sec-fetch-site: cross-site`、`Origin` 与 `Host` 不同源、`Host` 不是 loopback，三者任一命中即 403。因此浏览器里打开的任意网页既读不到报告，也调不动删除：未认证的请求连根路径都是 401。
+
 ## 删除前的兜底检查
 
 `lib/trash.js` 对每个待移动的路径独立复核，任何一条不满足就跳过：
@@ -120,6 +122,7 @@ K x44          → 留着
 - **复制完整性**：跨卷搬运后校验目标大小与原文件一致，不一致就反向搬回并报错。
 - **错误可见**：服务端异常写入 `/report.lastError` 与 `/health.error`，页面顶部显示可重试的错误卡片。
 - **接口约定**：所有写接口要求 `x-dsh-sweeper: 1` 头；`/delete` 还需 `token` + `confirmed:true`；勾选包含「不确定」项时再加 `acknowledge:true`。
+- **访问检查**：六个路由统一走 DSH 的 `requestRejection`（缺服务时 fail-closed 兜底），未认证请求 401、跨站请求 403；这一层与 `x-dsh-sweeper` 头互为纵深，不是替代。
 
 ## 自测
 

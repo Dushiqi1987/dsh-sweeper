@@ -170,7 +170,8 @@ const server = http.createServer(async (req, res) => {
       model: { provider: 'opencode-go', model: 'deepseek-v4.1-flash' }, ms: 9600,
       reviewed: REPORT.items.length, skipped: 0, note: 'harness', tiers: REPORT.tiers,
       auto: REPORT.items.filter(i => i.tier === 'safe').slice(0, 2),
-      asks: REPORT.items.filter(i => i.tier === 'unsure').slice(0, 1),
+      asks: REPORT.items.filter(i => i.tier === 'unsure').slice(0, 1)
+        .map(i => ({ key: i.key, path: i.path, tier: i.tier, size: i.size, question: 'harness: still needed?' })),
       kept: [], unknown: [], failed: [], moved: 0, movedBytes: 0,
       extra: { sweep: [], optional: [], rejected: [], hints: 0, moved: 0, movedBytes: 0 },
     })

@@ -85,6 +85,7 @@
   const tick = (ms) => new Promise(r => setTimeout(r, ms))
   const buttons = () => Array.from(document.querySelectorAll('button'))
   const byText = (t) => buttons().find(b => (b.textContent || '').includes(t))
+  const hasText = (t) => (document.body.textContent || '').includes(t)
   async function waitFor(fn, ms = 8000) {
     const end = Date.now() + ms
     while (Date.now() < end) {
@@ -93,6 +94,25 @@
       await tick(80)
     }
     return null
+  }
+
+  // Count report fetches so the harness can wait for the refresh that the
+  // page runs right after a review (that refresh is what used to wipe it).
+  // Sample the page shortly after every /report response: the review cards
+  // must be there both before and after the refresh that follows a review.
+  window.__samples = []
+  const rawFetch = window.fetch.bind(window)
+  window.fetch = function (input, init) {
+    const isReport = String(input).indexOf('/report') !== -1
+    const n = isReport ? (window.__reportFetches = (window.__reportFetches || 0) + 1) : window.__reportFetches || 0
+    const p = rawFetch(input, init)
+    if (isReport) {
+      p.then(() => setTimeout(() => {
+        const txt = document.body.textContent || ''
+        window.__samples.push({ n, has: txt.indexOf('deepseek-v4.1-flash') !== -1 && txt.indexOf('待你决定') !== -1 })
+      }, 400)).catch(() => {})
+    }
+    return p
   }
 
   async function autoDrive(budget) {
@@ -108,8 +128,14 @@
       if (!run) { window.__step = 'review button missing'; return }
       run.click(); window.__step = 'ran review'
       await waitFor(() => byText('模型认为可以无脑删') || byText('模型看完') || byText('待你决定'), budget)
-      while (Date.now() < deadline) await tick(150)
+      // wait until the post-review refresh has been sampled
+      for (let i = 0; i < 60 && (window.__reportFetches || 0) < 2; i++) await tick(100)
+      for (let i = 0; i < 40 && !((window.__samples || []).some((s) => s.n >= 2)); i++) await tick(100)
+      const after = (window.__samples || []).filter((s) => s.n >= 2)
+      const kept = after.length > 0 && after.every((s) => s.has)
+      document.title = 'review=' + (kept ? 'kept' : 'lost')
       window.__step = 'settled'
+      while (Date.now() < deadline) await tick(150)
       return
     }
 

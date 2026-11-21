@@ -142,6 +142,14 @@ K x44          → 留着
 - **接口约定**：所有写接口要求 `x-dsh-sweeper: 1` 头；`/delete` 还需 `token` + `confirmed:true`；勾选包含「不确定」项时再加 `acknowledge:true`。
 - **访问检查**：六个路由统一走 DSH 的 `requestRejection`（缺服务时 fail-closed 兜底），未认证请求 401、跨站请求 403；这一层与 `x-dsh-sweeper` 头互为纵深，不是替代。
 
+### 复核页签的回归检查
+
+```bash
+node test/browser/check.mjs        # 需要本机有 Chrome/Edge，或 CHROME=<path>
+```
+
+它启动回放服务、用无头浏览器点开「模型复核」并按一次「让模型复核」，然后**等到复核之后那次报告刷新落地**，再确认判定卡片还在屏幕上。v1.2.5 的那个 bug（结果刚出来就被刷新清空）就是它盯着的；把 `load(force, keepReview)` 改回无条件 `setReview(null)`，这条检查会红。
+
 ## 自测
 
 仓库自带两套检查，`git push` 后由 GitHub Actions 在 **Node 14.21.3 / 20 / 22** 三个版本上跑：

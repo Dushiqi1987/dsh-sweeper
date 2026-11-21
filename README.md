@@ -159,6 +159,15 @@ CI 里还有一步 `npm pack` 后检查 tarball 里确实有 `package/cordis.pat
 
 Node 14 是特意留着的：宿主运行时就是 `v14.21.3`，插件在这上面必须能 `import`（`node:` 前缀、`??=`、可选链这些都不能越界）。
 
+装好以后还可以让插件自己跑一遍只读回归（不发对话、不动文件）：
+
+```bash
+echo '{"go":true}' > "$HOME/.dsh/plugin-data/dsh-sweeper/selftest.json"
+# 重载插件后约 30 秒，结果出现在同目录的 selftest-out.json
+```
+
+它依次走 `report → deep/plan → deep/start(maxSessions:1) → deep/status`，把每一步的状态码、条数和深度清理的候选写成 JSON。**绝不会调用 `/delete`、`/purge`**，跑完自动删掉触发器。
+
 额外的手工预览（不在 CI 里，需要本机装过 DSH）：
 
 ```bash

@@ -94,3 +94,6 @@ chrome --headless=new --window-size=1180,1500 --virtual-time-budget=16000 \
   现在错误会进 `trashErr`：面板给红色错误卡 + 「重试」，统计卡显示 `—` 并提示读取失败。
   同一轮里「开始分析」失败时列表还挂着「排队中」，一并改为「待分析」，
   错误卡右侧补「重试分析」。
+
+- **22 · 顶层错误没走翻译**：`load()` 的 `.catch` 直接用 `err.message`，扫描失败时卡片上仍是
+  `scan failed while reading the session logs`；改成 `humanError(err)` 后与其它错误一致。

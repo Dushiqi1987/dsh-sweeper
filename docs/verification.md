@@ -68,5 +68,9 @@ chrome --headless=new --window-size=1180,1500 --virtual-time-budget=16000 \
 8. `模型问：undefined`
 9. 点「停止」只改状态，token 照烧
 10. `normKey` 不归一化尾斜杠 → `isInside` 边界判断可被绕过
+11. `maxSessions` 的裁剪被写回规划缓存 → 测试跑完后页面「只剩 1 段对话」持续一分钟
+12. 模型读报告期间重扫 → 判定仍按旧列表执行（现在直接 409，什么都不动）
+13. 客户端中途断开 → `readBody` 的 Promise 永远不 settle
+14. 一段日志打不开 → 整份深度计划 500（现在只跳过那一段并计数）
 
 前 8 个都只在「真实日志 + 真实模型 + 真渲染」这条路上才现形。

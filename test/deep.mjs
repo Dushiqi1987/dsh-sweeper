@@ -8,6 +8,7 @@
 
 import { runDeep, planDeep, parseReply, buildDigest, estimateTokens, forgetRestored, _internal } from '../lib/deep.js'
 import { normKey, joinPath } from '../lib/paths.js'
+import { cand as candFixture, keyOf } from './helpers.mjs'
 
 // DSH's host runtime has AbortController; a bare node 14 does not. Shim it so
 // this test can run under the oldest node the package claims to support.
@@ -221,9 +222,10 @@ check('cancelling still lets the in-flight calls finish', pooled.results.size ==
   const link = join(dir, '.scratch', 'link.mjs')
   try { await symlink(good, link) } catch { /* windows without rights */ }
 
-  // keys are normalised by scan.js on Windows only; on a case-sensitive
-  // filesystem the key has to be the path as it exists.
-  const cand = (p, size) => ({ key: p, path: p, size, kind: 'scratch', tool: 'write' })
+  // Keys go through the same normalisation scan.js applies, on every platform.
+  // Building one by hand is how the first two CI reds happened: Windows lower-
+  // cases the key, a case-sensitive runner does not.
+  const cand = (p, size) => candFixture(p, size)
   const session = {
     id: 'session-v', title: 'vet', ageDays: 9,
     _candidates: [
@@ -243,7 +245,7 @@ check('cancelling still lets the in-flight calls finish', pooled.results.size ==
     lstat: (await import('node:fs')).lstatSync,
     scratchRe: /(?:\.scratch)/i,
   })
-  check('a plain id becomes a safe candidate', out.sweep.length === 1 && out.sweep[0].key === good, JSON.stringify(out.sweep.map((x) => x.key)))
+  check('a plain id becomes a safe candidate', out.sweep.length === 1 && out.sweep[0].key === keyOf(good), JSON.stringify(out.sweep.map((x) => x.key)))
   check('an id we never sent is rejected, not guessed', out.rejected.some((r) => String(r.path).indexOf('i99') !== -1), JSON.stringify(out.rejected.map((r) => r.reason)))
   check('a file that changed size is rejected', out.rejected.some((r) => r.reason === 'the file changed after the deep plan'))
   // i1 appears twice (sweep and optional) but must produce one candidate;
@@ -251,7 +253,7 @@ check('cancelling still lets the in-flight calls finish', pooled.results.size ==
   check('the same id is only counted once', out.sweep.length === 1 && out.optional.length === 1 && out.rejected.length === 3,
     JSON.stringify({ sweep: out.sweep.length, optional: out.optional.length, rejected: out.rejected.length }))
   check('a non-temporary path is downgraded to 可选', out.optional.length >= 1 && out.optional[0].tier === 'unsure', JSON.stringify(out.optional.map((x) => [x.path, x.tier])))
-  check('a symlink is rejected when the platform allows one', !out.sweep.some((x) => x.key === link), JSON.stringify(out.sweep.map((x) => x.path)))
+  check('a symlink is rejected when the platform allows one', !out.sweep.some((x) => x.key === keyOf(link)), JSON.stringify(out.sweep.map((x) => x.path)))
   await rm(dir, { recursive: true, force: true })
 }
 

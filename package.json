@@ -1,6 +1,6 @@
 {
   "name": "dsh-sweeper",
-  "version": "1.3.7",
+  "version": "1.3.8",
   "private": true,
   "type": "module",
   "description": "Report-only audit of artifacts left behind by tool execution in DSH sessions",
@@ -51,5 +51,8 @@
         "@deepseek-ai/dsh-client-locale"
       ]
     }
+  },
+  "scripts": {
+    "guards": "node scripts/preflight.mjs"
   }
 }

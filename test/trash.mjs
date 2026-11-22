@@ -8,6 +8,7 @@
 import { mkdtemp, mkdir, readFile, rm, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
+import { keyOf } from './helpers.mjs'
 
 const root = await mkdtemp(join(tmpdir(), 'dsh-sweeper-trash-'))
 process.env.DSH_HOME = join(root, 'home')
@@ -29,7 +30,7 @@ const payload = 'hello world\n'
 await writeFile(fileA, payload)
 await writeFile(fileB, payload)
 
-const item = (p, size) => ({ key: p, path: p, size, tier: 'safe', kind: 'scratch', mtime: Date.now() })
+const item = (p, size) => ({ key: keyOf(p), path: p, size, tier: 'safe', kind: 'scratch', mtime: Date.now() })
 const batch = await quarantine([item(fileA, payload.length), item(fileB, payload.length)], { note: 'test' })
 
 check('quarantine returns a batch', !!(batch && batch.batch && batch.batch.count === 2), JSON.stringify(batch && batch.batch))

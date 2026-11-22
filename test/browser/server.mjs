@@ -159,12 +159,20 @@ const server = http.createServer(async (req, res) => {
     }
   }
 
+  // Empty walkthrough: EMPTY=1 (or ?empty=1) answers every endpoint with an
+  // empty result, so the four tabs' empty states can be read side by side.
+  const EMPTY = process.env.EMPTY === '1' || url.searchParams.get('empty') === '1'
+  const emptyReport = () => ({ ...REPORT, items: [],
+    stats: { ...REPORT.stats, candidates: 0, sessions: 0, toolCalls: 0 },
+    tiers: { safe: { count: 0, bytes: 0 }, unsure: { count: 0, bytes: 0 } } })
+
   if (p === '/plugins/dsh-sweeper/report') {
     if (boom('report', 500, 'scan failed while reading the session logs')) return
-    return json(res, 200, REPORT)
+    return json(res, 200, EMPTY ? emptyReport() : REPORT)
   }
   if (p === '/plugins/dsh-sweeper/trash') {
     if (boom('trash', 500, 'the quarantine index could not be read')) return
+    if (EMPTY) return json(res, 200, { root: REPORT.trashRoot, batches: [] })
     return json(res, 200, {
     root: REPORT.trashRoot,
     batches: [
@@ -175,6 +183,7 @@ const server = http.createServer(async (req, res) => {
   }
   if (p === '/plugins/dsh-sweeper/deep/plan') {
     if (boom('deep', 503, 'the model provider is not reachable right now')) return
+    if (EMPTY) return json(res, 200, { sessions: [], skipped: 0, week: 7, concurrency: 4, totalEstTokens: 0 })
     const sessions = REAL ? realSessions : SESSIONS
     const totalEstTokens = sessions.reduce((n, s) => n + (s.estTokens || 0), 0)
     return json(res, 200, { sessions, skipped: 9, week: 7, concurrency: REAL ? REAL.concurrency : 4, totalEstTokens })

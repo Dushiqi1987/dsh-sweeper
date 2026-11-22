@@ -120,7 +120,9 @@
     const mode = new URLSearchParams(location.search).get('mode') || 'deep'
 
     if (mode === 'tab') {
-      const name = new URLSearchParams(location.search).get('tab') || '深度清理'
+      const LABEL = { report: '扫描结果', review: '模型复核', deep: '深度清理', trash: '回收站' }
+      const raw = new URLSearchParams(location.search).get('tab') || 'deep'
+      const name = LABEL[raw] || raw
       const tab = await waitFor(() => byText(name))
       if (tab) { tab.click(); window.__step = 'opened ' + name } else { window.__step = name + ' missing' }
       while (Date.now() < deadline) await tick(150)

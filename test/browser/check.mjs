@@ -49,20 +49,17 @@ server.stderr.on('data', (b) => process.stderr.write(b))
 const fails = []
 const ok = (cond, msg) => (cond ? console.log('PASS ' + msg) : (fails.push(msg), console.log('FAIL ' + msg)))
 
-try {
-  for (let i = 0; i < 50 && !ready; i++) await wait(100)
-  if (!ready) throw new Error('replay server did not start')
-
-  const dom = await new Promise((resolve, reject) => {
+function dumpDom(url) {
+  return new Promise((resolve, reject) => {
     const p = spawn(chrome, [
       '--headless=new',
       '--disable-gpu',
       '--no-first-run',
       '--no-sandbox',
-      `--user-data-dir=${path.join(here, '.chrome-' + process.pid)}`,
+      `--user-data-dir=${path.join(here, '.chrome-' + process.pid + '-' + Math.random().toString(36).slice(2, 7))}`,
       `--virtual-time-budget=${BUDGET}`,
       '--dump-dom',
-      URL,
+      url,
     ], { stdio: ['ignore', 'pipe', 'pipe'] })
     let out = ''
     let err = ''
@@ -71,11 +68,38 @@ try {
     p.on('error', reject)
     p.on('close', () => (out ? resolve(out) : reject(new Error('chrome gave no DOM: ' + err.slice(0, 300)))))
   })
+}
+
+try {
+  for (let i = 0; i < 50 && !ready; i++) await wait(100)
+  if (!ready) throw new Error('replay server did not start')
+
+  const dom = await dumpDom(URL)
 
   ok(/已移入回收站/.test(dom), 'the verdict cards survive the refresh that follows a review')
   ok(/待你决定|待你确认/.test(dom), 'the asking card is still there after the refresh')
   const text = dom.replace(/<script[\s\S]*?<\/script>/g, '').replace(/<!--[\s\S]*?-->/g, '')
   ok(!/undefined|NaN|\(\s*\)/.test(text), 'no blank, undefined or NaN cells')
+
+  // Empty walkthrough: with nothing to clean the page must say one thing, not
+  // two empty sections sitting under a "it is clean" card.
+  const emptyServer = spawn(process.execPath, [path.join(here, 'server.mjs')], {
+    env: { ...process.env, PORT: String(PORT + 1), EMPTY: '1' },
+    stdio: ['ignore', 'pipe', 'pipe'],
+  })
+  let emptyReady = false
+  emptyServer.stdout.on('data', (b) => { if (String(b).includes('ready http')) emptyReady = true })
+  try {
+    for (let i = 0; i < 50 && !emptyReady; i++) await wait(100)
+    if (!emptyReady) throw new Error('empty replay server did not start')
+    const emptyDom = await dumpDom(`http://127.0.0.1:${PORT + 1}/?mode=tab&tab=report`)
+    const emptyText = emptyDom.replace(/<script[\s\S]*?<\/script>/g, '').replace(/<!--[\s\S]*?-->/g, '')
+    ok(/很干净，没有发现对话垃圾/.test(emptyText), 'the empty report says it is clean')
+    ok(!/没有可以无脑删的东西/.test(emptyText), 'no empty tier sections contradict the clean message')
+    ok(!/没有需要你判断的条目/.test(emptyText), 'the second tier section is hidden too')
+  } finally {
+    emptyServer.kill()
+  }
 } catch (e) {
   fails.push(String(e && e.message ? e.message : e))
   console.log('FAIL ' + e.message)

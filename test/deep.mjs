@@ -7,6 +7,7 @@
  */
 
 import { runDeep, planDeep, parseReply, buildDigest, estimateTokens, forgetRestored, _internal } from '../lib/deep.js'
+import { normKey, joinPath } from '../lib/paths.js'
 
 // DSH's host runtime has AbortController; a bare node 14 does not. Shim it so
 // this test can run under the oldest node the package claims to support.
@@ -256,20 +257,27 @@ check('cancelling still lets the in-flight calls finish', pooled.results.size ==
 
 {
   // Restoring a file must take it off the page, or the next clean click would
-  // move it straight back into the bin.
-  const row = { items: [{ key: 'd:\\a\\x.mjs' }, { key: 'd:\\a\\y.mjs' }] }
+  // move it straight back into the bin. Built with the platform's own rules so
+  // the assertion means the same thing on Windows and on the CI runners.
+  const root = process.platform === 'win32' ? 'D:\\sweeper-test' : '/tmp/sweeper-test'
+  const x = joinPath(root, 'x.mjs')
+  const y = joinPath(root, 'y.mjs')
+  const kx = normKey(x)
+  const ky = normKey(y)
+  const row = { items: [{ key: kx }, { key: ky }] }
   const job = { order: ['s1'], sessions: new Map([['s1', row]]) }
   const deep = {
-    sweep: [{ key: 'd:\\a\\x.mjs' }, { key: 'd:\\a\\y.mjs' }],
-    optional: [{ key: 'd:\\a\\x.mjs' }],
-    byKey: new Map([['d:\\a\\x.mjs', {}], ['d:\\a\\y.mjs', {}]]),
+    sweep: [{ key: kx }, { key: ky }],
+    optional: [{ key: kx }],
+    byKey: new Map([[kx, {}], [ky, {}]]),
   }
-  forgetRestored(deep, job, ['D:\\a\\x.mjs'])
+  forgetRestored(deep, job, [x])
   check('a restored file leaves the deep buckets', deep.sweep.length === 1 && deep.optional.length === 0 &&
-    deep.sweep[0].key === 'd:\\a\\y.mjs', JSON.stringify(deep.sweep))
-  check('a restored file leaves the job row', row.items.length === 1 && row.items[0].key === 'd:\\a\\y.mjs', JSON.stringify(row.items))
-  check('a restored file leaves the key map', !deep.byKey.has('d:\\a\\x.mjs') && deep.byKey.has('d:\\a\\y.mjs'))
-  check('restoring something else changes nothing', forgetRestored(deep, job, ['D:\\other.mjs']) === deep && deep.sweep.length === 1)
+    deep.sweep[0].key === ky, JSON.stringify(deep.sweep))
+  check('a restored file leaves the job row', row.items.length === 1 && row.items[0].key === ky, JSON.stringify(row.items))
+  check('a restored file leaves the key map', !deep.byKey.has(kx) && deep.byKey.has(ky))
+  const untouched = joinPath(root, 'other.mjs')
+  check('restoring something else changes nothing', forgetRestored(deep, job, [untouched]) === deep && deep.sweep.length === 1)
 }
 
 check('_internal exposes the pieces the host uses', typeof _internal.describeSession === 'function' && typeof _internal.candidatesOf === 'function')

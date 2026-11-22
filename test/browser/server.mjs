@@ -25,7 +25,7 @@ const ITEM = (key, size, days, extra) => ({
   key, path: key, kind: 'scratch', tier: extra && extra.tier || 'safe',
   size, mtime: Date.now() - days * 86400000, ageDays: days,
   refs: 0, uses: 0, failed: false, tracked: false,
-  reasons: [extra && extra.reason || 'temporary script under .scratch, never referenced again'],
+  reasons: [extra && extra.reason || '位于 .scratch 的一次性脚本，产生后再没被引用过'],
   session: { id: 'session-1e39c0aa', title: 'P4b mock launch' },
   tool: 'write', turn: 3, step: 2, at: Date.now() - days * 86400000,
 })
@@ -36,13 +36,13 @@ const REPORT = {
   trashRoot: 'C:\\Users\\demo\\.dsh\\plugin-data\\dsh-sweeper\\trash',
   ageMs: 1200, durationMs: 9700, weekDays: 7, truncated: false, unreadable: 0,
   lastError: null,
-  stats: { sessions: 46, events: 100464, calls: 16400, artifacts: 578, errors: 420, openJobs: 6, ms: 9700 },
+  stats: { sessions: 46, events: 100464, toolCalls: 16400, artifacts: 578, errors: 420, openJobs: 6, ms: 9700 },
   protected: { recent: 66, live: 15, tracked: 0, gone: 92, unsafe: 0 },
   tiers: { safe: { count: 2, bytes: 6003 }, unsure: { count: 1, bytes: 1786 } },
   items: [
     ITEM('D:\\OpenFuture\\.scratch\\launch-p4b.ps1', 896, 12),
     ITEM('D:\\OpenFuture\\.scratch\\probe.sh', 39, 12),
-    ITEM('D:\\OpenFuture\\.scratch\\graph-restore.ts', 1786, 9, { tier: 'unsure', reason: 'temp file, but a later call read it once' }),
+    ITEM('D:\\OpenFuture\\.scratch\\graph-restore.ts', 1786, 9, { tier: 'unsure', reason: '临时文件，但之后被工具读取过一次' }),
   ],
 }
 
@@ -124,7 +124,7 @@ function status() {
     sessions,
     sweep: finished ? SWEEP : [],
     optional: [],
-    rejected: finished ? [{ path: 'C:\\Users\\demo\\Desktop\\iccv\\weights\\model.pth', reason: 'larger than 50 MB' }] : [],
+    rejected: finished ? [{ path: 'C:\\Users\\demo\\Desktop\\iccv\\weights\\model.pth', reason: '超过 50 MB，不在建议范围内' }] : [],
   }
 }
 
@@ -138,6 +138,16 @@ const server = http.createServer(async (req, res) => {
   const url = new URL(req.url, 'http://local')
   const p = url.pathname
 
+  // Error walkthrough: FAIL=report,deep,trash,start makes the chosen endpoints
+  // misbehave so the error cards and retry affordances can be inspected.
+  const FAIL = new Set(String(process.env.FAIL || '').split(',').filter(Boolean))
+  const boom = (name, status, message) => {
+    if (!FAIL.has(name)) return false
+    if (name === 'report') json(res, status, { error: message, token: null })
+    else json(res, status, { error: message })
+    return true
+  }
+
   if (req.method === 'GET' && STATIC[p]) {
     try {
       const body = await readFile(STATIC[p])
@@ -149,20 +159,28 @@ const server = http.createServer(async (req, res) => {
     }
   }
 
-  if (p === '/plugins/dsh-sweeper/report') return json(res, 200, REPORT)
-  if (p === '/plugins/dsh-sweeper/trash') return json(res, 200, {
+  if (p === '/plugins/dsh-sweeper/report') {
+    if (boom('report', 500, 'scan failed while reading the session logs')) return
+    return json(res, 200, REPORT)
+  }
+  if (p === '/plugins/dsh-sweeper/trash') {
+    if (boom('trash', 500, 'the quarantine index could not be read')) return
+    return json(res, 200, {
     root: REPORT.trashRoot,
     batches: [
       { id: 'mreplay1-aaaaaa', count: 5, bytes: 11068, createdAt: 1795278403226, note: 'deep review' },
       { id: 'mreplay2-bbbbbb', count: 1, bytes: 76317, createdAt: 1795192003226, note: 'scan' },
     ],
   })
+  }
   if (p === '/plugins/dsh-sweeper/deep/plan') {
+    if (boom('deep', 503, 'the model provider is not reachable right now')) return
     const sessions = REAL ? realSessions : SESSIONS
     const totalEstTokens = sessions.reduce((n, s) => n + (s.estTokens || 0), 0)
     return json(res, 200, { sessions, skipped: 9, week: 7, concurrency: REAL ? REAL.concurrency : 4, totalEstTokens })
   }
   if (p === '/plugins/dsh-sweeper/deep/start' && req.method === 'POST') {
+    if (boom('start', 502, 'model call failed: provider returned 502')) return
     start = Date.now(); polls = 0
     const n = REAL ? realSessions.length : SESSIONS.length
     const est = (REAL ? realSessions : SESSIONS).reduce((a, s) => a + (s.estTokens || 0), 0)

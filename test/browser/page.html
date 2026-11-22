@@ -119,6 +119,15 @@
     const deadline = Date.now() + budget
     const mode = new URLSearchParams(location.search).get('mode') || 'deep'
 
+    if (mode === 'trash') {
+      const tab = await waitFor(() => byText('回收站'))
+      if (!tab) { window.__step = 'trash tab missing'; return }
+      tab.click(); window.__step = 'opened trash tab'
+      await waitFor(() => byText('彻底删除'), budget)
+      while (Date.now() < deadline) await tick(150)
+      return
+    }
+
     if (mode === 'review') {
       const tab = await waitFor(() => byText('模型复核'))
       if (!tab) { window.__step = 'review tab missing'; return }

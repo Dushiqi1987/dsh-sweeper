@@ -31,6 +31,7 @@ const ITEM = (key, size, days, extra) => ({
 })
 
 const REPORT = {
+  generatedAt: 1795278000000,
   token: 'tk-harness',
   trashRoot: 'C:\\Users\\demo\\.dsh\\plugin-data\\dsh-sweeper\\trash',
   ageMs: 1200, durationMs: 9700, weekDays: 7, truncated: false, unreadable: 0,
@@ -149,7 +150,13 @@ const server = http.createServer(async (req, res) => {
   }
 
   if (p === '/plugins/dsh-sweeper/report') return json(res, 200, REPORT)
-  if (p === '/plugins/dsh-sweeper/trash') return json(res, 200, { root: REPORT.trashRoot, batches: [] })
+  if (p === '/plugins/dsh-sweeper/trash') return json(res, 200, {
+    root: REPORT.trashRoot,
+    batches: [
+      { id: 'mreplay1-aaaaaa', count: 5, bytes: 11068, createdAt: 1795278403226, note: 'deep review' },
+      { id: 'mreplay2-bbbbbb', count: 1, bytes: 76317, createdAt: 1795192003226, note: 'scan' },
+    ],
+  })
   if (p === '/plugins/dsh-sweeper/deep/plan') {
     const sessions = REAL ? realSessions : SESSIONS
     const totalEstTokens = sessions.reduce((n, s) => n + (s.estTokens || 0), 0)

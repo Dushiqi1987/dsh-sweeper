@@ -27,15 +27,15 @@ jobs:
 
       - name: Syntax check every module
         run: |
-          for f in lib/*.js test/harness.js test/paths.mjs test/deep.mjs scripts/selfcheck.mjs; do
+          for f in lib/*.js test/harness.js test/paths.mjs test/deep.mjs test/trash.mjs scripts/selfcheck.mjs; do
             node --check "$f"
           done
 
       - name: Manifest and bundle patch
         run: node scripts/selfcheck.mjs
 
-      - name: Deep-clean worker pool and prompt parsing
-        run: node test/paths.mjs && node test/deep.mjs
+      - name: Path rules, deep-clean pool, quarantine bookkeeping
+        run: node test/paths.mjs && node test/deep.mjs && node test/trash.mjs
 
       - name: Settings page renders in every state
         working-directory: test

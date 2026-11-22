@@ -69,6 +69,23 @@ check('the atomic writer leaves no temporary file', noTmp === '', noTmp)
 const missing = await purge('mnever0-xxxxxx')
 check('purging a vanished batch reports missing', missing.purged === false && missing.missing === true, JSON.stringify(missing))
 
+// A damaged batch still has to be deletable: an unreadable manifest used to be
+// read as "the batch is gone", so the one path a user has to reclaim that space
+// answered 404 after the files were already deleted.
+const gone = await purge(damaged.batch.id)
+check('a damaged batch can still be purged', gone.purged === true && gone.missing === false, JSON.stringify(gone))
+check('and the purge counts the files it removed', gone.count === 1, String(gone.count))
+check('the damaged batch is off the list afterwards', (await listBatches()).length === 0)
+
+// Clicking delete twice (two tabs, or an impatient double click) must not look
+// like a crash the second time.
+await writeFile(fileA, payload)
+const twice = await quarantine([item(fileA, payload.length)], { note: 'twice' })
+await purge(twice.batch.id)
+const second = await purge(twice.batch.id)
+check('purging the same batch twice answers missing the second time',
+  second.purged === false && second.missing === true, JSON.stringify(second))
+
 await rm(root, { recursive: true, force: true })
 console.log(fails.length ? '\nFAIL\n- ' + fails.join('\n- ') : '\ntrash OK')
 process.exitCode = fails.length ? 1 : 0

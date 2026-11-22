@@ -118,3 +118,8 @@ chrome --headless=new --window-size=1180,1500 --virtual-time-budget=16000 \
   现在 `refused` 的数量和原因都会进提示（`gone` 译成「文件已经不在那个位置了」），token 过期时返回
   `409 {stale:true}`，页面直接自刷新而不是留着已经失效的行。自测里 `"staleToken": true` 是只读校验：
   `{"status":409,"stale":true}`，一个文件都没动。
+
+- **28 · 损坏的批次反而删不掉**：清单文件读不出来时，`purge()` 把「读不到清单」当成「这个批次不存在」，
+  于是先 `rm -rf` 删掉文件、再回 `404 that batch is already gone`——用户看到的是「删除失败」，磁盘却已经空了。
+  现在 `existed` 只由 `stat` 决定，清单坏了就数目录里的文件当 `count`；`rm` 因文件被占用而失败时返回
+  `409 BATCH_IN_USE`（「批次里有文件正被别的程序占用」），不再把系统错误原文抛给用户。

@@ -97,3 +97,8 @@ chrome --headless=new --window-size=1180,1500 --virtual-time-budget=16000 \
 
 - **22 · 顶层错误没走翻译**：`load()` 的 `.catch` 直接用 `err.message`，扫描失败时卡片上仍是
   `scan failed while reading the session logs`；改成 `humanError(err)` 后与其它错误一致。
+
+- **23 · 并发 `/report` 换 token**：`/report` 在扫描进行中拿到的是「已发布的视图」，再喂给 `publish()` 恒判为新报告，
+  于是每个并发请求都换一次 token、页面手里的 token 立刻作废；现在 `run()` 一直持有 promise 到发布为止，`/report` 直接返回它的结果。
+- **24 · 空报告自相矛盾**：没有任何候选时，页面同时显示「很干净，没有发现对话垃圾」和两个「0 项」栏目；
+  现在没有候选就只显示那张汇总卡，回放检查里有三条断言盯着（去掉修复会失败）。

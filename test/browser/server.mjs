@@ -11,6 +11,8 @@ import os from 'node:os'
 import path from 'node:path'
 
 const here = path.dirname(fileURLToPath(import.meta.url))
+// The page's ?stale= is remembered: the delete POST carries no query of its own.
+let STALE = process.env.STALE || ''
 const root = path.resolve(here, '..')             // test/
 const repo = path.resolve(here, '..', '..')       // package root
 
@@ -137,6 +139,7 @@ function json(res, code, body) {
 const server = http.createServer(async (req, res) => {
   const url = new URL(req.url, 'http://local')
   const p = url.pathname
+  if (process.env.LOG_REQ === '1') console.log('REQ', req.method, p, url.searchParams.toString())
 
   // Error walkthrough: FAIL=report,deep,trash,start makes the chosen endpoints
   // misbehave so the error cards and retry affordances can be inspected.
@@ -167,6 +170,7 @@ const server = http.createServer(async (req, res) => {
     tiers: { safe: { count: 0, bytes: 0 }, unsure: { count: 0, bytes: 0 } } })
 
   if (p === '/plugins/dsh-sweeper/report') {
+    if (url.searchParams.get('stale')) STALE = url.searchParams.get('stale')
     if (boom('report', 500, 'scan failed while reading the session logs')) return
     return json(res, 200, EMPTY ? emptyReport() : REPORT)
   }
@@ -197,6 +201,25 @@ const server = http.createServer(async (req, res) => {
   }
   if (p === '/plugins/dsh-sweeper/deep/status') return json(res, 200, { job: start ? status() : null })
   if (p === '/plugins/dsh-sweeper/deep/cancel') return json(res, 200, { ok: true })
+  // Stale-tab walkthrough: `?stale=gone` answers a delete with every row
+  // refused (another tab cleaned them first), `?stale=409` answers with the
+  // out-of-date token error. Both are states a second tab really hits.
+  if (p === '/plugins/dsh-sweeper/delete' && req.method === 'POST') {
+    if (boom('delete', 500, 'the quarantine rejected every path')) return
+    if (STALE === '409') {
+      return json(res, 409, { error: 'this list is out of date because the report was refreshed elsewhere; scanning again', stale: true })
+    }
+    if (STALE === 'gone') {
+      return json(res, 200, {
+        batch: null, moved: [], failed: [], items: REPORT.items,
+        refused: REPORT.items.map((i) => ({ path: i.path, key: i.key, reason: 'gone' })),
+      })
+    }
+    return json(res, 200, {
+      batch: { id: 'mreplay3-cccccc', count: REPORT.items.length, bytes: 6003 },
+      moved: REPORT.items.map((i) => i.key), failed: [], refused: [], items: [],
+    })
+  }
   if (p === '/plugins/dsh-sweeper/review' && req.method === 'POST') {
     console.log('review hit', new Date().toISOString(), JSON.stringify(req.headers).slice(0,120))
     if (process.env.REAL && REAL_REVIEW) return json(res, 200, REAL_REVIEW)

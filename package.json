@@ -1,6 +1,6 @@
 {
   "name": "dsh-sweeper",
-  "version": "1.3.4",
+  "version": "1.3.5",
   "private": true,
   "type": "module",
   "description": "Report-only audit of artifacts left behind by tool execution in DSH sessions",

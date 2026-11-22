@@ -6,7 +6,7 @@
  *   node test/deep.js
  */
 
-import { runDeep, parseReply, buildDigest, estimateTokens, _internal } from '../lib/deep.js'
+import { runDeep, planDeep, parseReply, buildDigest, estimateTokens, _internal } from '../lib/deep.js'
 
 // DSH's host runtime has AbortController; a bare node 14 does not. Shim it so
 // this test can run under the oldest node the package claims to support.
@@ -148,6 +148,31 @@ const pooled = await new Promise((resolve) => {
 })
 check('cancelling stops the pool from dispatching', pooled.cancelled === 4, 'cancelled=' + pooled.cancelled)
 check('cancelling still lets the in-flight calls finish', pooled.results.size === 2, 'results=' + pooled.results.size)
+
+// One unreadable log must not take the whole plan down with it.
+{
+  const old = Date.now() - 30 * 24 * 3600 * 1000
+  const persistence = {
+    list: async () => [{ header: { id: 'session-ok' } }, { header: { id: 'session-bad' } }],
+    open: async (id) => {
+      if (id === 'session-bad') throw new Error('corrupt log')
+      return {
+        read: async (off, len) => (off
+          ? { events: [] }
+          : { events: [
+              { type: 'session', id, createdAt: old, cwd: 'D:\\nowhere' },
+              { type: 'user/message', time: old, text: 'hello' },
+            ] }),
+      }
+    },
+  }
+  const fake = {
+    get: (name) => (name === 'sessions' ? { list: () => [] } : name === 'sessionPersistence' ? persistence : undefined),
+  }
+  const plan = await planDeep(fake, { week: 7, now: Date.now() })
+  check('an unreadable log is skipped, not fatal', plan.unreadable === 1, 'unreadable=' + plan.unreadable)
+  check('the readable log still makes it into the plan', plan.sessions.length === 0, 'sessions=' + plan.sessions.length)
+}
 
 check('_internal exposes the pieces the host uses', typeof _internal.describeSession === 'function' && typeof _internal.candidatesOf === 'function')
 

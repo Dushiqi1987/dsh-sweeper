@@ -51,6 +51,20 @@ check('one of restore/purge wins, the other is refused', okCount === 1, 'fulfill
 check('the loser gets a 409, not a stack trace', !!(rejected && rejected.reason && rejected.reason.status === 409),
   rejected && rejected.reason && String(rejected.reason.message))
 
+// A torn manifest must not hide the files: the page has to show the batch so
+// the disk can still be reclaimed, and must refuse to promise a restore.
+const damaged = await quarantine([item(fileA, payload.length)], { note: 'damaged' })
+await writeFile(join(trashRoot(), damaged.batch.id, 'manifest.json'), '{"entries": [', 'utf8')
+const listed = (await listBatches()).find((b) => b.id === damaged.batch.id)
+check('a corrupt manifest is reported, not skipped', !!listed && listed.damaged === true, JSON.stringify(listed))
+check('the damaged batch still counts its files', !!listed && listed.count === 1, listed && String(listed.count))
+const noTmp = await readFile(join(trashRoot(), damaged.batch.id, 'manifest.json.tmp')).then(() => 'left behind').catch(() => '')
+check('the atomic writer leaves no temporary file', noTmp === '', noTmp)
+
+// Purging something that is already gone says so instead of claiming success.
+const missing = await purge('mnever0-xxxxxx')
+check('purging a vanished batch reports missing', missing.purged === false && missing.missing === true, JSON.stringify(missing))
+
 await rm(root, { recursive: true, force: true })
 console.log(fails.length ? '\nFAIL\n- ' + fails.join('\n- ') : '\ntrash OK')
 process.exitCode = fails.length ? 1 : 0

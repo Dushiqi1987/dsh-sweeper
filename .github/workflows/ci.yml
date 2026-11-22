@@ -27,7 +27,7 @@ jobs:
 
       - name: Syntax check every module
         run: |
-          for f in lib/*.js test/harness.js test/paths.mjs test/deep.mjs test/trash.mjs test/helpers.mjs test/browser/*.mjs scripts/*.mjs; do
+          for f in lib/*.js test/harness.js test/paths.mjs test/deep.mjs test/trash.mjs test/contract.mjs test/helpers.mjs test/browser/*.mjs scripts/*.mjs; do
             node --check "$f"
           done
 
@@ -43,6 +43,12 @@ jobs:
 
       - name: Path rules, deep-clean pool, quarantine bookkeeping
         run: node test/paths.mjs && node test/deep.mjs && node test/trash.mjs
+
+      # The replay server's fixtures are hand-written. If they drift from a real
+      # response, the browser check still passes — it just never renders the
+      # field that went missing. This compares them with a real capture.
+      - name: Replay fixtures match a real capture
+        run: node test/contract.mjs
 
       - name: Settings page renders in every state
         working-directory: test

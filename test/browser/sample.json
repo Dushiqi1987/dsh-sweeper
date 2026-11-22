@@ -1,0 +1,1398 @@
+{
+  "report": {
+    "generatedAt": 1795367239760,
+    "durationMs": 11830,
+    "weekDays": 7,
+    "home": "C:\\\\Users\\\\demo",
+    "stats": {
+      "sessions": 63,
+      "events": 144729,
+      "toolCalls": 23055,
+      "errors": 525,
+      "openJobs": 7,
+      "artifacts": 841,
+      "candidates": 3,
+      "listed": 3,
+      "liveSessions": 17,
+      "unreadableSessions": 0
+    },
+    "protected": {
+      "recent": 72,
+      "live": 46,
+      "tracked": 0,
+      "gone": 169,
+      "unsafe": 0
+    },
+    "tiers": {
+      "safe": {
+        "count": 0,
+        "bytes": 0
+      },
+      "unsure": {
+        "count": 3,
+        "bytes": 780
+      }
+    },
+    "unreadable": [],
+    "items": [
+      {
+        "path": "D:/OpenFuture/.scratch/p1-workspace/decisions.md",
+        "key": "d:\\openfuture\\.scratch\\p1-workspace\\decisions.md",
+        "kind": "scratch",
+        "tier": "unsure",
+        "reasons": [
+          "临时目录，但之后还被用过 1 次"
+        ],
+        "size": 310,
+        "mtime": 1794155350966.2275,
+        "ageDays": 14,
+        "lastUseAt": 1794155350985,
+        "refs": 5,
+        "uses": 1,
+        "failed": false,
+        "tracked": false,
+        "session": {
+          "id": "session-1e39c0df-7226-40e0-a0ed-e06caf44bbe9",
+          "title": "Pi 本地化与 OpenFuture 二次开发"
+        },
+        "tool": "write",
+        "turn": 10,
+        "step": 97,
+        "at": 1794155350956
+      },
+      {
+        "path": "D:/OpenFuture/.scratch/p1-workspace/memory-overview.md",
+        "key": "d:\\openfuture\\.scratch\\p1-workspace\\memory-overview.md",
+        "kind": "scratch",
+        "tier": "unsure",
+        "reasons": [
+          "临时目录，但之后还被用过 1 次"
+        ],
+        "size": 305,
+        "mtime": 1794155350950.7175,
+        "ageDays": 14,
+        "lastUseAt": 1794155350985,
+        "refs": 7,
+        "uses": 1,
+        "failed": false,
+        "tracked": false,
+        "session": {
+          "id": "session-1e39c0df-7226-40e0-a0ed-e06caf44bbe9",
+          "title": "Pi 本地化与 OpenFuture 二次开发"
+        },
+        "tool": "write",
+        "turn": 10,
+        "step": 97,
+        "at": 1794155350938
+      },
+      {
+        "path": "D:/OpenFuture/.scratch/p1-workspace/preferences.md",
+        "key": "d:\\openfuture\\.scratch\\p1-workspace\\preferences.md",
+        "kind": "scratch",
+        "tier": "unsure",
+        "reasons": [
+          "临时目录，但之后还被用过 1 次"
+        ],
+        "size": 165,
+        "mtime": 1794155350980.2317,
+        "ageDays": 14,
+        "lastUseAt": 1794155350985,
+        "refs": 6,
+        "uses": 1,
+        "failed": false,
+        "tracked": false,
+        "session": {
+          "id": "session-1e39c0df-7226-40e0-a0ed-e06caf44bbe9",
+          "title": "Pi 本地化与 OpenFuture 二次开发"
+        },
+        "tool": "write",
+        "turn": 10,
+        "step": 97,
+        "at": 1794155350971
+      }
+    ],
+    "hints": [
+      {
+        "path": "D:\\OpenFuture\\.scratch\\catalog-pkg.tgz",
+        "key": "d:\\openfuture\\.scratch\\catalog-pkg.tgz",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 4815997,
+        "mtime": 1794545452934.1704,
+        "ageDays": 9
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\cu-ui.png",
+        "key": "d:\\openfuture\\.scratch\\cu-ui.png",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 523189,
+        "mtime": 1794297655589.2666,
+        "ageDays": 12
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\agent-mode-final.png",
+        "key": "d:\\openfuture\\.scratch\\agent-mode-final.png",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 493251,
+        "mtime": 1794389540324.7646,
+        "ageDays": 11
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\automation-tool-ui.png",
+        "key": "d:\\openfuture\\.scratch\\automation-tool-ui.png",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 492134,
+        "mtime": 1794378247731.7773,
+        "ageDays": 11
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\acp-plugin-panel.png",
+        "key": "d:\\openfuture\\.scratch\\acp-plugin-panel.png",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 454485,
+        "mtime": 1794307479297.286,
+        "ageDays": 12
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\automation-ui-form.png",
+        "key": "d:\\openfuture\\.scratch\\automation-ui-form.png",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 431583,
+        "mtime": 1794374410428.8726,
+        "ageDays": 11
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\check-thinking-early.png",
+        "key": "d:\\openfuture\\.scratch\\check-thinking-early.png",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 425242,
+        "mtime": 1794746674606.9895,
+        "ageDays": 7
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\automation-ui.png",
+        "key": "d:\\openfuture\\.scratch\\automation-ui.png",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 389433,
+        "mtime": 1794374075515.1511,
+        "ageDays": 11
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\automation-open-conversation.png",
+        "key": "d:\\openfuture\\.scratch\\automation-open-conversation.png",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 346253,
+        "mtime": 1794382048928.4436,
+        "ageDays": 11
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\desktop-taskbar.png",
+        "key": "d:\\openfuture\\.scratch\\desktop-taskbar.png",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 191269,
+        "mtime": 1794310346741.156,
+        "ageDays": 12
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\desktop-taskbar2.png",
+        "key": "d:\\openfuture\\.scratch\\desktop-taskbar2.png",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 191269,
+        "mtime": 1794310376566.5508,
+        "ageDays": 12
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\desktop-taskbar3.png",
+        "key": "d:\\openfuture\\.scratch\\desktop-taskbar3.png",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 191269,
+        "mtime": 1794310460133.8123,
+        "ageDays": 12
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\desktop-taskbar4.png",
+        "key": "d:\\openfuture\\.scratch\\desktop-taskbar4.png",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 173852,
+        "mtime": 1794310523718.2803,
+        "ageDays": 12
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\desktop-icon-final2.png",
+        "key": "d:\\openfuture\\.scratch\\desktop-icon-final2.png",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 168243,
+        "mtime": 1794310698546.978,
+        "ageDays": 12
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\agent-mode.png",
+        "key": "d:\\openfuture\\.scratch\\agent-mode.png",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 161523,
+        "mtime": 1794385368252.1465,
+        "ageDays": 11
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\desktop-icon-final.png",
+        "key": "d:\\openfuture\\.scratch\\desktop-icon-final.png",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 69493,
+        "mtime": 1794310640521.9514,
+        "ageDays": 12
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\df-tree.json",
+        "key": "d:\\openfuture\\.scratch\\df-tree.json",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 46085,
+        "mtime": 1794311889637.6553,
+        "ageDays": 12
+      },
+      {
+        "path": "C:\\\\Users\\\\demo\\Desktop\\iccv\\tmp\\src.b64",
+        "key": "c:\\users\\杜世旗\\desktop\\iccv\\tmp\\src.b64",
+        "root": "C:\\\\Users\\\\demo\\Desktop\\iccv\\tmp",
+        "size": 29204,
+        "mtime": 1794390245760.668,
+        "ageDays": 11
+      },
+      {
+        "path": "C:\\\\Users\\\\demo\\Desktop\\iccv\\tmp\\src.tgz",
+        "key": "c:\\users\\杜世旗\\desktop\\iccv\\tmp\\src.tgz",
+        "root": "C:\\\\Users\\\\demo\\Desktop\\iccv\\tmp",
+        "size": 21903,
+        "mtime": 1794390292639.0999,
+        "ageDays": 11
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\cache-state.json",
+        "key": "d:\\openfuture\\.scratch\\cache-state.json",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 18458,
+        "mtime": 1794394876962.759,
+        "ageDays": 11
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\df-shared.js",
+        "key": "d:\\openfuture\\.scratch\\df-shared.js",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 14630,
+        "mtime": 1794312092287.953,
+        "ageDays": 12
+      },
+      {
+        "path": "C:\\\\Users\\\\demo\\Desktop\\iccv\\tmp\\lf_deep_backbone.py",
+        "key": "c:\\users\\杜世旗\\desktop\\iccv\\tmp\\lf_deep_backbone.py",
+        "root": "C:\\\\Users\\\\demo\\Desktop\\iccv\\tmp",
+        "size": 14228,
+        "mtime": 1794478813275.6602,
+        "ageDays": 10
+      },
+      {
+        "path": "C:\\\\Users\\\\demo\\Desktop\\iccv\\tmp\\lf_backbone.py",
+        "key": "c:\\users\\杜世旗\\desktop\\iccv\\tmp\\lf_backbone.py",
+        "root": "C:\\\\Users\\\\demo\\Desktop\\iccv\\tmp",
+        "size": 14170,
+        "mtime": 1794454148129.3286,
+        "ageDays": 10
+      },
+      {
+        "path": "C:\\\\Users\\\\demo\\Desktop\\iccv\\tmp\\lf_scratch_train.py",
+        "key": "c:\\users\\杜世旗\\desktop\\iccv\\tmp\\lf_scratch_train.py",
+        "root": "C:\\\\Users\\\\demo\\Desktop\\iccv\\tmp",
+        "size": 11926,
+        "mtime": 1794478814218.069,
+        "ageDays": 10
+      },
+      {
+        "path": "C:\\\\Users\\\\demo\\Desktop\\iccv\\tmp\\lf_train.py",
+        "key": "c:\\users\\杜世旗\\desktop\\iccv\\tmp\\lf_train.py",
+        "root": "C:\\\\Users\\\\demo\\Desktop\\iccv\\tmp",
+        "size": 11918,
+        "mtime": 1794454148258.8484,
+        "ageDays": 10
+      },
+      {
+        "path": "C:\\\\Users\\\\demo\\Desktop\\iccv\\tmp\\lf_fra.md",
+        "key": "c:\\users\\杜世旗\\desktop\\iccv\\tmp\\lf_fra.md",
+        "root": "C:\\\\Users\\\\demo\\Desktop\\iccv\\tmp",
+        "size": 11161,
+        "mtime": 1794532364370.021,
+        "ageDays": 9
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\check-thinking.mjs",
+        "key": "d:\\openfuture\\.scratch\\check-thinking.mjs",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 10665,
+        "mtime": 1794746668798.536,
+        "ageDays": 7
+      },
+      {
+        "path": "C:\\\\Users\\\\demo\\Desktop\\iccv\\tmp\\tmp_src_run_pilot.py",
+        "key": "c:\\users\\杜世旗\\desktop\\iccv\\tmp\\tmp_src_run_pilot.py",
+        "root": "C:\\\\Users\\\\demo\\Desktop\\iccv\\tmp",
+        "size": 9811,
+        "mtime": 1794394005542.6267,
+        "ageDays": 11
+      },
+      {
+        "path": "C:\\\\Users\\\\demo\\Desktop\\iccv\\tmp\\lf_FRA_zh.md",
+        "key": "c:\\users\\杜世旗\\desktop\\iccv\\tmp\\lf_fra_zh.md",
+        "root": "C:\\\\Users\\\\demo\\Desktop\\iccv\\tmp",
+        "size": 8721,
+        "mtime": 1794479368296.2546,
+        "ageDays": 10
+      },
+      {
+        "path": "C:\\\\Users\\\\demo\\Desktop\\iccv\\tmp\\lf_scratch_evaluate.py",
+        "key": "c:\\users\\杜世旗\\desktop\\iccv\\tmp\\lf_scratch_evaluate.py",
+        "root": "C:\\\\Users\\\\demo\\Desktop\\iccv\\tmp",
+        "size": 8214,
+        "mtime": 1794478815195.4702,
+        "ageDays": 10
+      },
+      {
+        "path": "C:\\\\Users\\\\demo\\Desktop\\iccv\\tmp\\lf_dsq.md",
+        "key": "c:\\users\\杜世旗\\desktop\\iccv\\tmp\\lf_dsq.md",
+        "root": "C:\\\\Users\\\\demo\\Desktop\\iccv\\tmp",
+        "size": 6187,
+        "mtime": 1794495354164.1099,
+        "ageDays": 10
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\agent-ui-test.mjs",
+        "key": "d:\\openfuture\\.scratch\\agent-ui-test.mjs",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 5700,
+        "mtime": 1794385299655.4363,
+        "ageDays": 11
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\app9257.out.log",
+        "key": "d:\\openfuture\\.scratch\\app9257.out.log",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 5418,
+        "mtime": 1794316557313.452,
+        "ageDays": 12
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\automation-target-ui-test2.mjs",
+        "key": "d:\\openfuture\\.scratch\\automation-target-ui-test2.mjs",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 4488,
+        "mtime": 1794383138971.0361,
+        "ageDays": 11
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\agent-role-test2.mjs",
+        "key": "d:\\openfuture\\.scratch\\agent-role-test2.mjs",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 4469,
+        "mtime": 1794385984961.934,
+        "ageDays": 11
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\agent-role-test3.mjs",
+        "key": "d:\\openfuture\\.scratch\\agent-role-test3.mjs",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 4318,
+        "mtime": 1794386557390.3733,
+        "ageDays": 11
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\automation-current-test.mjs",
+        "key": "d:\\openfuture\\.scratch\\automation-current-test.mjs",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 4198,
+        "mtime": 1794381912051.2427,
+        "ageDays": 11
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\automation-ui-form-test.mjs",
+        "key": "d:\\openfuture\\.scratch\\automation-ui-form-test.mjs",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 4187,
+        "mtime": 1794374396249.5815,
+        "ageDays": 11
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\automation-target-ui-test.mjs",
+        "key": "d:\\openfuture\\.scratch\\automation-target-ui-test.mjs",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 4136,
+        "mtime": 1794382965846.3372,
+        "ageDays": 11
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\agent-role-test4.mjs",
+        "key": "d:\\openfuture\\.scratch\\agent-role-test4.mjs",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 4029,
+        "mtime": 1794386732130.6458,
+        "ageDays": 11
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\app-cu.log",
+        "key": "d:\\openfuture\\.scratch\\app-cu.log",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 4022,
+        "mtime": 1794747647399.261,
+        "ageDays": 7
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\agent-clean.log",
+        "key": "d:\\openfuture\\.scratch\\agent-clean.log",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 3948,
+        "mtime": 1794389530112.709,
+        "ageDays": 11
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\automation-final-ui-test.mjs",
+        "key": "d:\\openfuture\\.scratch\\automation-final-ui-test.mjs",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 3936,
+        "mtime": 1794374443062.8474,
+        "ageDays": 11
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\dream-adapter.out.log",
+        "key": "d:\\openfuture\\.scratch\\dream-adapter.out.log",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 3804,
+        "mtime": 1794223306797.9663,
+        "ageDays": 13
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\automation-tool-test.mjs",
+        "key": "d:\\openfuture\\.scratch\\automation-tool-test.mjs",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 3797,
+        "mtime": 1794378031358.9722,
+        "ageDays": 11
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\agent-role-test5.mjs",
+        "key": "d:\\openfuture\\.scratch\\agent-role-test5.mjs",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 3631,
+        "mtime": 1794387090055.1094,
+        "ageDays": 11
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\chain-live-test.mjs",
+        "key": "d:\\openfuture\\.scratch\\chain-live-test.mjs",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 3603,
+        "mtime": 1794238202373.9734,
+        "ageDays": 13
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\cu-test.mjs",
+        "key": "d:\\openfuture\\.scratch\\cu-test.mjs",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 3594,
+        "mtime": 1794297120083.9412,
+        "ageDays": 12
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\agent-role-test.mjs",
+        "key": "d:\\openfuture\\.scratch\\agent-role-test.mjs",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 3557,
+        "mtime": 1794385530899.968,
+        "ageDays": 11
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\cu-move-test.mjs",
+        "key": "d:\\openfuture\\.scratch\\cu-move-test.mjs",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 3551,
+        "mtime": 1794299244744.345,
+        "ageDays": 12
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\cu-final-test.mjs",
+        "key": "d:\\openfuture\\.scratch\\cu-final-test.mjs",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 3485,
+        "mtime": 1794297604600.147,
+        "ageDays": 12
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\chain-tool-test.mjs",
+        "key": "d:\\openfuture\\.scratch\\chain-tool-test.mjs",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 3440,
+        "mtime": 1794238290991.4387,
+        "ageDays": 13
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\automation-current-state.json",
+        "key": "d:\\openfuture\\.scratch\\automation-current-state.json",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 3403,
+        "mtime": 1794381027032.97,
+        "ageDays": 11
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\automation-open-ui-test.mjs",
+        "key": "d:\\openfuture\\.scratch\\automation-open-ui-test.mjs",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 3316,
+        "mtime": 1794382033879.847,
+        "ageDays": 11
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\chain-ui-shot.mjs",
+        "key": "d:\\openfuture\\.scratch\\chain-ui-shot.mjs",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 3267,
+        "mtime": 1794227482867.42,
+        "ageDays": 13
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\cu-toggle-result.json",
+        "key": "d:\\openfuture\\.scratch\\cu-toggle-result.json",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 3260,
+        "mtime": 1794297629063.1814,
+        "ageDays": 12
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\agent-debug.log",
+        "key": "d:\\openfuture\\.scratch\\agent-debug.log",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 3161,
+        "mtime": 1794389116079.2283,
+        "ageDays": 11
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\automation-target-save-test.mjs",
+        "key": "d:\\openfuture\\.scratch\\automation-target-save-test.mjs",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 3152,
+        "mtime": 1794383444605.9934,
+        "ageDays": 11
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\chain-ui-test.mjs",
+        "key": "d:\\openfuture\\.scratch\\chain-ui-test.mjs",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 3107,
+        "mtime": 1794227085741.5078,
+        "ageDays": 13
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\check-dsh-ui2.mjs",
+        "key": "d:\\openfuture\\.scratch\\check-dsh-ui2.mjs",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 3013,
+        "mtime": 1794286988960.3357,
+        "ageDays": 12
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\automation-scheduled-test.mjs",
+        "key": "d:\\openfuture\\.scratch\\automation-scheduled-test.mjs",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 2976,
+        "mtime": 1794374315261.5996,
+        "ageDays": 11
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\automation-ui-test.mjs",
+        "key": "d:\\openfuture\\.scratch\\automation-ui-test.mjs",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 2849,
+        "mtime": 1794374063378.0754,
+        "ageDays": 11
+      },
+      {
+        "path": "C:\\\\Users\\\\demo\\Desktop\\iccv\\tmp\\lf_deep_fra.py",
+        "key": "c:\\users\\杜世旗\\desktop\\iccv\\tmp\\lf_deep_fra.py",
+        "root": "C:\\\\Users\\\\demo\\Desktop\\iccv\\tmp",
+        "size": 2783,
+        "mtime": 1794478812105.7234,
+        "ageDays": 10
+      },
+      {
+        "path": "C:\\\\Users\\\\demo\\Desktop\\iccv\\tmp\\lf_fra.py",
+        "key": "c:\\users\\杜世旗\\desktop\\iccv\\tmp\\lf_fra.py",
+        "root": "C:\\\\Users\\\\demo\\Desktop\\iccv\\tmp",
+        "size": 2707,
+        "mtime": 1794454585227.405,
+        "ageDays": 10
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\automation-api-test.mjs",
+        "key": "d:\\openfuture\\.scratch\\automation-api-test.mjs",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 2676,
+        "mtime": 1794374037073.9045,
+        "ageDays": 11
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\agent-send-now.mjs",
+        "key": "d:\\openfuture\\.scratch\\agent-send-now.mjs",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 2613,
+        "mtime": 1794386845580.9983,
+        "ageDays": 11
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\agent-final-test.mjs",
+        "key": "d:\\openfuture\\.scratch\\agent-final-test.mjs",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 2566,
+        "mtime": 1794389331725.9216,
+        "ageDays": 11
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\cu-ui-check.mjs",
+        "key": "d:\\openfuture\\.scratch\\cu-ui-check.mjs",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 2566,
+        "mtime": 1794297362725.8496,
+        "ageDays": 12
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\agent-check2.mjs",
+        "key": "d:\\openfuture\\.scratch\\agent-check2.mjs",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 2494,
+        "mtime": 1794385464397.7502,
+        "ageDays": 11
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\automation-cleanup-evidence.mjs",
+        "key": "d:\\openfuture\\.scratch\\automation-cleanup-evidence.mjs",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 2417,
+        "mtime": 1794374484566.2583,
+        "ageDays": 11
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\check-dsh-ui.mjs",
+        "key": "d:\\openfuture\\.scratch\\check-dsh-ui.mjs",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 2417,
+        "mtime": 1794286925162.5303,
+        "ageDays": 12
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\check-copy.mjs",
+        "key": "d:\\openfuture\\.scratch\\check-copy.mjs",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 2387,
+        "mtime": 1794287076776.4846,
+        "ageDays": 12
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\automation-target-inspect.mjs",
+        "key": "d:\\openfuture\\.scratch\\automation-target-inspect.mjs",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 2303,
+        "mtime": 1794383394940.8213,
+        "ageDays": 11
+      },
+      {
+        "path": "C:\\\\Users\\\\demo\\Desktop\\iccv\\tmp\\fbp24_metric_policy.json",
+        "key": "c:\\users\\杜世旗\\desktop\\iccv\\tmp\\fbp24_metric_policy.json",
+        "root": "C:\\\\Users\\\\demo\\Desktop\\iccv\\tmp",
+        "size": 2247,
+        "mtime": 1794490256989.2478,
+        "ageDays": 10
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\automation-tool-ui.mjs",
+        "key": "d:\\openfuture\\.scratch\\automation-tool-ui.mjs",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 2230,
+        "mtime": 1794378185993.6118,
+        "ageDays": 11
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\cleanup-agents.mjs",
+        "key": "d:\\openfuture\\.scratch\\cleanup-agents.mjs",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 2216,
+        "mtime": 1794389176823.4512,
+        "ageDays": 11
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\context-app3.out.log",
+        "key": "d:\\openfuture\\.scratch\\context-app3.out.log",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 2199,
+        "mtime": 1794306794653.2944,
+        "ageDays": 12
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\cu-toggle-test.mjs",
+        "key": "d:\\openfuture\\.scratch\\cu-toggle-test.mjs",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 2154,
+        "mtime": 1794297535945.196,
+        "ageDays": 12
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\direct-agent-open.mjs",
+        "key": "d:\\openfuture\\.scratch\\direct-agent-open.mjs",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 2105,
+        "mtime": 1794388440462.6736,
+        "ageDays": 11
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\cu-panel-check2.mjs",
+        "key": "d:\\openfuture\\.scratch\\cu-panel-check2.mjs",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 2085,
+        "mtime": 1794299592277.6553,
+        "ageDays": 12
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\agent-check.mjs",
+        "key": "d:\\openfuture\\.scratch\\agent-check.mjs",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 2076,
+        "mtime": 1794385403911.8223,
+        "ageDays": 11
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\automation-current-test.json",
+        "key": "d:\\openfuture\\.scratch\\automation-current-test.json",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 2071,
+        "mtime": 1794382012478.3813,
+        "ageDays": 11
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\cu-panel-check.mjs",
+        "key": "d:\\openfuture\\.scratch\\cu-panel-check.mjs",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 2025,
+        "mtime": 1794299552239.0586,
+        "ageDays": 12
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\adapter2.err.log",
+        "key": "d:\\openfuture\\.scratch\\adapter2.err.log",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 2018,
+        "mtime": 1794223306801.964,
+        "ageDays": 13
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\automation-current-state.mjs",
+        "key": "d:\\openfuture\\.scratch\\automation-current-state.mjs",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 1994,
+        "mtime": 1794381016446.5432,
+        "ageDays": 11
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\cu-panel.mjs",
+        "key": "d:\\openfuture\\.scratch\\cu-panel.mjs",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 1992,
+        "mtime": 1794297499607.4104,
+        "ageDays": 12
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\automation-api-result.json",
+        "key": "d:\\openfuture\\.scratch\\automation-api-result.json",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 1892,
+        "mtime": 1794374495055.4924,
+        "ageDays": 11
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\debug-open.mjs",
+        "key": "d:\\openfuture\\.scratch\\debug-open.mjs",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 1866,
+        "mtime": 1794227406866.0107,
+        "ageDays": 13
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\cu-enable.mjs",
+        "key": "d:\\openfuture\\.scratch\\cu-enable.mjs",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 1864,
+        "mtime": 1794297041506.5354,
+        "ageDays": 12
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\context-app4.out.log",
+        "key": "d:\\openfuture\\.scratch\\context-app4.out.log",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 1859,
+        "mtime": 1794306958773.8652,
+        "ageDays": 12
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\app-run.log",
+        "key": "d:\\openfuture\\.scratch\\app-run.log",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 1791,
+        "mtime": 1794553681284.2124,
+        "ageDays": 9
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\context-app2.out.log",
+        "key": "d:\\openfuture\\.scratch\\context-app2.out.log",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 1742,
+        "mtime": 1794306699972.028,
+        "ageDays": 12
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\check-model.mjs",
+        "key": "d:\\openfuture\\.scratch\\check-model.mjs",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 1688,
+        "mtime": 1794217430380.9092,
+        "ageDays": 13
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\check-agent-data.mjs",
+        "key": "d:\\openfuture\\.scratch\\check-agent-data.mjs",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 1623,
+        "mtime": 1794387364671.5525,
+        "ageDays": 11
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\cu-restore.mjs",
+        "key": "d:\\openfuture\\.scratch\\cu-restore.mjs",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 1560,
+        "mtime": 1794297415621.6565,
+        "ageDays": 12
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\check-build.mjs",
+        "key": "d:\\openfuture\\.scratch\\check-build.mjs",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 1510,
+        "mtime": 1794386094138.6016,
+        "ageDays": 11
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\cache-state.mjs",
+        "key": "d:\\openfuture\\.scratch\\cache-state.mjs",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 1493,
+        "mtime": 1794394844464.1482,
+        "ageDays": 11
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\check-adapted-panel.mjs",
+        "key": "d:\\openfuture\\.scratch\\check-adapted-panel.mjs",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 1440,
+        "mtime": 1794553749617.7705,
+        "ageDays": 9
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\cu-verification.json",
+        "key": "d:\\openfuture\\.scratch\\cu-verification.json",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 1430,
+        "mtime": 1794297482523.92,
+        "ageDays": 12
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\acp-tools.mjs",
+        "key": "d:\\openfuture\\.scratch\\acp-tools.mjs",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 1429,
+        "mtime": 1794306366000.0215,
+        "ageDays": 12
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\context-app.out.log",
+        "key": "d:\\openfuture\\.scratch\\context-app.out.log",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 1428,
+        "mtime": 1794306419092.8052,
+        "ageDays": 12
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\acp-ui-check.mjs",
+        "key": "d:\\openfuture\\.scratch\\acp-ui-check.mjs",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 1340,
+        "mtime": 1794307478338.666,
+        "ageDays": 12
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\acp-tools2.mjs",
+        "key": "d:\\openfuture\\.scratch\\acp-tools2.mjs",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 1338,
+        "mtime": 1794306418906.2756,
+        "ageDays": 12
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\acp-status-test.mjs",
+        "key": "d:\\openfuture\\.scratch\\acp-status-test.mjs",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 1266,
+        "mtime": 1794306794450.261,
+        "ageDays": 12
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\composer-dom.mjs",
+        "key": "d:\\openfuture\\.scratch\\composer-dom.mjs",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 1252,
+        "mtime": 1794386775335.6172,
+        "ageDays": 11
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\cu-ui.json",
+        "key": "d:\\openfuture\\.scratch\\cu-ui.json",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 1201,
+        "mtime": 1794297655590.2659,
+        "ageDays": 12
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\acp-compress-test.mjs",
+        "key": "d:\\openfuture\\.scratch\\acp-compress-test.mjs",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 1198,
+        "mtime": 1794307019089.7224,
+        "ageDays": 12
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\acp-context-result.json",
+        "key": "d:\\openfuture\\.scratch\\acp-context-result.json",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 1198,
+        "mtime": 1794307539596.0479,
+        "ageDays": 12
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\cu-test-result.json",
+        "key": "d:\\openfuture\\.scratch\\cu-test-result.json",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 1180,
+        "mtime": 1794297335232.9878,
+        "ageDays": 12
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\automation-target-inspect.json",
+        "key": "d:\\openfuture\\.scratch\\automation-target-inspect.json",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 1178,
+        "mtime": 1794383885256.79,
+        "ageDays": 11
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\automation-tool-test.json",
+        "key": "d:\\openfuture\\.scratch\\automation-tool-test.json",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 1108,
+        "mtime": 1794378111184.156,
+        "ageDays": 11
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\automation-debug-dom.mjs",
+        "key": "d:\\openfuture\\.scratch\\automation-debug-dom.mjs",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 1096,
+        "mtime": 1794382905730.225,
+        "ageDays": 11
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\chain-new.log",
+        "key": "d:\\openfuture\\.scratch\\chain-new.log",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 1057,
+        "mtime": 1794294346174.191,
+        "ageDays": 12
+      },
+      {
+        "path": "C:\\\\Users\\\\demo\\Desktop\\iccv\\tmp\\cmp_fra.py",
+        "key": "c:\\users\\杜世旗\\desktop\\iccv\\tmp\\cmp_fra.py",
+        "root": "C:\\\\Users\\\\demo\\Desktop\\iccv\\tmp",
+        "size": 1056,
+        "mtime": 1794472025849.5369,
+        "ageDays": 10
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\acp-search-test.mjs",
+        "key": "d:\\openfuture\\.scratch\\acp-search-test.mjs",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 1018,
+        "mtime": 1794307191132.8635,
+        "ageDays": 12
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\acp-decompress-test.mjs",
+        "key": "d:\\openfuture\\.scratch\\acp-decompress-test.mjs",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 1001,
+        "mtime": 1794307267514.2593,
+        "ageDays": 12
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\automation-scheduled-result.json",
+        "key": "d:\\openfuture\\.scratch\\automation-scheduled-result.json",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 993,
+        "mtime": 1794374352139.71,
+        "ageDays": 11
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\cu-move-result.json",
+        "key": "d:\\openfuture\\.scratch\\cu-move-result.json",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 976,
+        "mtime": 1794299274038.3972,
+        "ageDays": 12
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\acp-status2.mjs",
+        "key": "d:\\openfuture\\.scratch\\acp-status2.mjs",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 972,
+        "mtime": 1794307125367.391,
+        "ageDays": 12
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\acp-check.mjs",
+        "key": "d:\\openfuture\\.scratch\\acp-check.mjs",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 956,
+        "mtime": 1794306348319.7136,
+        "ageDays": 12
+      },
+      {
+        "path": "C:\\\\Users\\\\demo\\Desktop\\iccv\\tmp\\test_fra_identity.py",
+        "key": "c:\\users\\杜世旗\\desktop\\iccv\\tmp\\test_fra_identity.py",
+        "root": "C:\\\\Users\\\\demo\\Desktop\\iccv\\tmp",
+        "size": 948,
+        "mtime": 1794454630046.7263,
+        "ageDays": 10
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\asar-cat.mjs",
+        "key": "d:\\openfuture\\.scratch\\asar-cat.mjs",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 839,
+        "mtime": 1794483898285.6316,
+        "ageDays": 10
+      },
+      {
+        "path": "C:\\\\Users\\\\demo\\Desktop\\iccv\\tmp\\check_frag2.py",
+        "key": "c:\\users\\杜世旗\\desktop\\iccv\\tmp\\check_frag2.py",
+        "root": "C:\\\\Users\\\\demo\\Desktop\\iccv\\tmp",
+        "size": 816,
+        "mtime": 1794479022614.83,
+        "ageDays": 10
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\app-launch.log",
+        "key": "d:\\openfuture\\.scratch\\app-launch.log",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 764,
+        "mtime": 1794546171913.7656,
+        "ageDays": 9
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\catalog-check.mjs",
+        "key": "d:\\openfuture\\.scratch\\catalog-check.mjs",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 737,
+        "mtime": 1794545610616.8948,
+        "ageDays": 9
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\agent-mode-result.json",
+        "key": "d:\\openfuture\\.scratch\\agent-mode-result.json",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 732,
+        "mtime": 1794389596162.6233,
+        "ageDays": 11
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\asar-ls.mjs",
+        "key": "d:\\openfuture\\.scratch\\asar-ls.mjs",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 721,
+        "mtime": 1794483767675.6072,
+        "ageDays": 10
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\check-black.mjs",
+        "key": "d:\\openfuture\\.scratch\\check-black.mjs",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 718,
+        "mtime": 1794310677918.3596,
+        "ageDays": 12
+      },
+      {
+        "path": "C:\\\\Users\\\\demo\\Desktop\\iccv\\tmp\\check_frag3.py",
+        "key": "c:\\users\\杜世旗\\desktop\\iccv\\tmp\\check_frag3.py",
+        "root": "C:\\\\Users\\\\demo\\Desktop\\iccv\\tmp",
+        "size": 706,
+        "mtime": 1794479141569.961,
+        "ageDays": 10
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\build-rag.log",
+        "key": "d:\\openfuture\\.scratch\\build-rag.log",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 703,
+        "mtime": 1794762003551.9043,
+        "ageDays": 7
+      },
+      {
+        "path": "C:\\\\Users\\\\demo\\Desktop\\iccv\\tmp\\lf_queue_frag.sh",
+        "key": "c:\\users\\杜世旗\\desktop\\iccv\\tmp\\lf_queue_frag.sh",
+        "root": "C:\\\\Users\\\\demo\\Desktop\\iccv\\tmp",
+        "size": 696,
+        "mtime": 1794479182472.842,
+        "ageDays": 10
+      },
+      {
+        "path": "C:\\\\Users\\\\demo\\Desktop\\iccv\\tmp\\queue_frag.sh",
+        "key": "c:\\users\\杜世旗\\desktop\\iccv\\tmp\\queue_frag.sh",
+        "root": "C:\\\\Users\\\\demo\\Desktop\\iccv\\tmp",
+        "size": 696,
+        "mtime": 1794479182095.3362,
+        "ageDays": 10
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\deps-smoke.log",
+        "key": "d:\\openfuture\\.scratch\\deps-smoke.log",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 674,
+        "mtime": 1794502102527.246,
+        "ageDays": 10
+      },
+      {
+        "path": "C:\\\\Users\\\\demo\\Desktop\\iccv\\tmp\\lf_queue_fra.sh",
+        "key": "c:\\users\\杜世旗\\desktop\\iccv\\tmp\\lf_queue_fra.sh",
+        "root": "C:\\\\Users\\\\demo\\Desktop\\iccv\\tmp",
+        "size": 628,
+        "mtime": 1794454763891.1707,
+        "ageDays": 10
+      },
+      {
+        "path": "C:\\\\Users\\\\demo\\Desktop\\iccv\\tmp\\queue_fra.sh",
+        "key": "c:\\users\\杜世旗\\desktop\\iccv\\tmp\\queue_fra.sh",
+        "root": "C:\\\\Users\\\\demo\\Desktop\\iccv\\tmp",
+        "size": 628,
+        "mtime": 1794454763614.1338,
+        "ageDays": 10
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\check-health.cjs",
+        "key": "d:\\openfuture\\.scratch\\check-health.cjs",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 587,
+        "mtime": 1794198439971.723,
+        "ageDays": 13
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\automation-open-conversation-ui.json",
+        "key": "d:\\openfuture\\.scratch\\automation-open-conversation-ui.json",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 555,
+        "mtime": 1794382048711.3726,
+        "ageDays": 11
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\bring-front.mjs",
+        "key": "d:\\openfuture\\.scratch\\bring-front.mjs",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 541,
+        "mtime": 1794310371616.2478,
+        "ageDays": 12
+      },
+      {
+        "path": "C:\\\\Users\\\\demo\\Desktop\\iccv\\tmp\\check_frag.py",
+        "key": "c:\\users\\杜世旗\\desktop\\iccv\\tmp\\check_frag.py",
+        "root": "C:\\\\Users\\\\demo\\Desktop\\iccv\\tmp",
+        "size": 539,
+        "mtime": 1794478915718.2932,
+        "ageDays": 10
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\build-and-test-of.sh",
+        "key": "d:\\openfuture\\.scratch\\build-and-test-of.sh",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 495,
+        "mtime": 1794199244178.806,
+        "ageDays": 13
+      },
+      {
+        "path": "C:\\\\Users\\\\demo\\Desktop\\iccv\\tmp\\probe_fra_gamma.py",
+        "key": "c:\\users\\杜世旗\\desktop\\iccv\\tmp\\probe_fra_gamma.py",
+        "root": "C:\\\\Users\\\\demo\\Desktop\\iccv\\tmp",
+        "size": 414,
+        "mtime": 1794470959079.0696,
+        "ageDays": 10
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\asar-root.mjs",
+        "key": "d:\\openfuture\\.scratch\\asar-root.mjs",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 406,
+        "mtime": 1794483863081.6558,
+        "ageDays": 10
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\agent-clean.err.log",
+        "key": "d:\\openfuture\\.scratch\\agent-clean.err.log",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 369,
+        "mtime": 1794389326442.035,
+        "ageDays": 11
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\agent-debug.err.log",
+        "key": "d:\\openfuture\\.scratch\\agent-debug.err.log",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 369,
+        "mtime": 1794389097123.8958,
+        "ageDays": 11
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\app9257.err.log",
+        "key": "d:\\openfuture\\.scratch\\app9257.err.log",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 369,
+        "mtime": 1794312517168.191,
+        "ageDays": 12
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\automation-final-ui-result.json",
+        "key": "d:\\openfuture\\.scratch\\automation-final-ui-result.json",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 345,
+        "mtime": 1794374458366.3328,
+        "ageDays": 11
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\automation-ui-form-result.json",
+        "key": "d:\\openfuture\\.scratch\\automation-ui-form-result.json",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 337,
+        "mtime": 1794374410429.8728,
+        "ageDays": 11
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\automation-target-ui-result.json",
+        "key": "d:\\openfuture\\.scratch\\automation-target-ui-result.json",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 334,
+        "mtime": 1794383934986.5605,
+        "ageDays": 11
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\app-err.log",
+        "key": "d:\\openfuture\\.scratch\\app-err.log",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 270,
+        "mtime": 1794553271393.162,
+        "ageDays": 9
+      },
+      {
+        "path": "C:\\\\Users\\\\demo\\Desktop\\iccv\\tmp\\probe_fra_gamma2.py",
+        "key": "c:\\users\\杜世旗\\desktop\\iccv\\tmp\\probe_fra_gamma2.py",
+        "root": "C:\\\\Users\\\\demo\\Desktop\\iccv\\tmp",
+        "size": 233,
+        "mtime": 1794471007042.9268,
+        "ageDays": 10
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\diag.bat",
+        "key": "d:\\openfuture\\.scratch\\diag.bat",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 203,
+        "mtime": 1794136234135.932,
+        "ageDays": 14
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\adapter.out.log",
+        "key": "d:\\openfuture\\.scratch\\adapter.out.log",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 170,
+        "mtime": 1794223138969.8098,
+        "ageDays": 13
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\adapter2.out.log",
+        "key": "d:\\openfuture\\.scratch\\adapter2.out.log",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 170,
+        "mtime": 1794223307968.787,
+        "ageDays": 13
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\adapt-catalog.json",
+        "key": "d:\\openfuture\\.scratch\\adapt-catalog.json",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 159,
+        "mtime": 1794502278198.565,
+        "ageDays": 10
+      },
+      {
+        "path": "C:\\\\Users\\\\demo\\Desktop\\iccv\\tmp\\waiter_fra.log",
+        "key": "c:\\users\\杜世旗\\desktop\\iccv\\tmp\\waiter_fra.log",
+        "root": "C:\\\\Users\\\\demo\\Desktop\\iccv\\tmp",
+        "size": 48,
+        "mtime": 1794467799263.588,
+        "ageDays": 10
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\diag2.bat",
+        "key": "d:\\openfuture\\.scratch\\diag2.bat",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 31,
+        "mtime": 1794136245823.1863,
+        "ageDays": 14
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\app-restart.log",
+        "key": "d:\\openfuture\\.scratch\\app-restart.log",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 2,
+        "mtime": 1794747649690.694,
+        "ageDays": 7
+      },
+      {
+        "path": "C:\\\\Users\\\\demo\\Desktop\\iccv\\tmp\\src.err",
+        "key": "c:\\users\\杜世旗\\desktop\\iccv\\tmp\\src.err",
+        "root": "C:\\\\Users\\\\demo\\Desktop\\iccv\\tmp",
+        "size": 0,
+        "mtime": 1794390244934.9878,
+        "ageDays": 11
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\adapter.err.log",
+        "key": "d:\\openfuture\\.scratch\\adapter.err.log",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 0,
+        "mtime": 1794223137806.4634,
+        "ageDays": 13
+      },
+      {
+        "path": "D:\\OpenFuture\\.scratch\\dream-adapter.err.log",
+        "key": "d:\\openfuture\\.scratch\\dream-adapter.err.log",
+        "root": "D:\\OpenFuture\\.scratch",
+        "size": 0,
+        "mtime": 1794223305791.7095,
+        "ageDays": 13
+      }
+    ],
+    "truncated": false
+  }
+}

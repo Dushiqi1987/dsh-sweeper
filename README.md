@@ -174,6 +174,12 @@ node test/browser/check.mjs        # 需要本机有 Chrome/Edge，或 CHROME=<p
 
 ## 自测
 
+```sh
+npm run guards     # 跨平台断言守卫
+npm run contract   # 回放 fixtures 与真实响应的契约
+```
+
+
 仓库自带两套检查，`git push` 后由 GitHub Actions 在 **Node 14.21.3 / 20 / 22** 三个版本上跑：
 
 ```bash

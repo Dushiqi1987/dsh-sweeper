@@ -174,6 +174,35 @@ check('cancelling still lets the in-flight calls finish', pooled.results.size ==
   check('the readable log still makes it into the plan', plan.sessions.length === 0, 'sessions=' + plan.sessions.length)
 }
 
+// The planner runs once per cache window and opens one handle per conversation;
+// a handle that is never closed piles up across refreshes.
+{
+  const handles = []
+  const events = [
+    { type: 'session', id: 'session-a', time: Date.now(), createdAt: Date.now() },
+    { type: 'tool/call', time: Date.now(), data: { name: 'write', callId: 'c1', arguments: JSON.stringify({ file_path: 'D:\\x\\a.txt' }) } },
+  ]
+  const fake = {
+    open: async (id) => {
+      const h = { id, closed: false, read: async (off) => ({ events: off ? [] : events }), close: async () => { h.closed = true } }
+      handles.push(h)
+      return h
+    },
+  }
+  const info = await _internal.describeSession({}, fake, { header: { id: 'session-a' } })
+  check('describeSession reads a log through the handle', !!info && info.toolCalls === 1, JSON.stringify(info && info.toolCalls))
+  check('the read handle is closed afterwards', handles.length === 1 && handles[0].closed === true, 'handles=' + handles.length)
+
+  const empty = { open: async (id) => ({ id, closed: false, read: async () => ({ events: [] }), close: async () => {} }) }
+  const none = await _internal.describeSession({}, empty, { header: { id: 'session-b' } })
+  check('a log with no events yields null', none === null)
+
+  const broken = { open: async () => { throw new Error('cannot open') } }
+  let code = ''
+  try { await _internal.describeSession({}, broken, { header: { id: 'session-c' } }) } catch (e) { code = e.code }
+  check('an unopenable log is marked SWEEPER_UNREADABLE', code === 'SWEEPER_UNREADABLE', 'code=' + code)
+}
+
 check('_internal exposes the pieces the host uses', typeof _internal.describeSession === 'function' && typeof _internal.candidatesOf === 'function')
 
 console.log(fails.length ? '\nFAIL\n- ' + fails.join('\n- ') : '\ndeep pass OK')

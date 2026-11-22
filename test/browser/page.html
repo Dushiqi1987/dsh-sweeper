@@ -76,7 +76,7 @@
 
     const root = ReactDOM.createRoot(document.getElementById('root'))
     root.render(React.createElement(Component))
-    document.getElementById('boot').textContent = 'registered: ' + registrations.join(', ')
+    document.getElementById('boot').textContent = ''
 
     if (stopAt) autoDrive(stopAt)
   }

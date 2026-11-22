@@ -203,6 +203,57 @@ check('cancelling still lets the in-flight calls finish', pooled.results.size ==
   check('an unopenable log is marked SWEEPER_UNREADABLE', code === 'SWEEPER_UNREADABLE', 'code=' + code)
 }
 
+// Vetting: the model only sees ids, so every id has to survive a second look
+// at the disk before it can appear on the page.
+{
+  const { mkdtemp, mkdir, writeFile, rm, symlink } = await import('node:fs/promises')
+  const { tmpdir } = await import('node:os')
+  const { join } = await import('node:path')
+  const dir = await mkdtemp(join(tmpdir(), 'dsh-sweeper-vet-'))
+  const good = join(dir, '.scratch', 'probe.mjs')
+  const grown = join(dir, '.scratch', 'grown.mjs')
+  const plain = join(dir, 'notes.md')
+  await mkdir(join(dir, '.scratch'), { recursive: true })
+  await writeFile(good, 'x')
+  await writeFile(grown, 'xxxxxx')
+  await writeFile(plain, 'notes')
+  const link = join(dir, '.scratch', 'link.mjs')
+  try { await symlink(good, link) } catch { /* windows without rights */ }
+
+  // keys are normalised by scan.js on Windows only; on a case-sensitive
+  // filesystem the key has to be the path as it exists.
+  const cand = (p, size) => ({ key: p, path: p, size, kind: 'scratch', tool: 'write' })
+  const session = {
+    id: 'session-v', title: 'vet', ageDays: 9,
+    _candidates: [
+      cand(good, 1),
+      cand(grown, 1), // the file grew after the plan: size no longer matches
+      cand(plain, 5), // not a temporary-looking path: must land in 可选
+      cand(link, 1),
+    ],
+  }
+  const parsed = {
+    sweep: [{ id: 'i1', reason: '一次性探针' }, { id: 'i99', reason: '不在清单里的编号' }, { id: 'i2', reason: '长大了' }, { id: 'i4', reason: '链接' }],
+    optional: [{ id: 'i3', reason: '看起来还在用' }, { id: 'i1', reason: '重复出现' }],
+  }
+  const out = await _internal.vetDeepResult(session, parsed, {
+    rejectionReason: async () => null,
+    gitTracked: async () => false,
+    lstat: (await import('node:fs')).lstatSync,
+    scratchRe: /(?:\.scratch)/i,
+  })
+  check('a plain id becomes a safe candidate', out.sweep.length === 1 && out.sweep[0].key === good, JSON.stringify(out.sweep.map((x) => x.key)))
+  check('an id we never sent is rejected, not guessed', out.rejected.some((r) => String(r.path).indexOf('i99') !== -1), JSON.stringify(out.rejected.map((r) => r.reason)))
+  check('a file that changed size is rejected', out.rejected.some((r) => r.reason === 'the file changed after the deep plan'))
+  // i1 appears twice (sweep and optional) but must produce one candidate;
+  // i99/i2/i4 are each rejected once with their own reason.
+  check('the same id is only counted once', out.sweep.length === 1 && out.optional.length === 1 && out.rejected.length === 3,
+    JSON.stringify({ sweep: out.sweep.length, optional: out.optional.length, rejected: out.rejected.length }))
+  check('a non-temporary path is downgraded to 可选', out.optional.length >= 1 && out.optional[0].tier === 'unsure', JSON.stringify(out.optional.map((x) => [x.path, x.tier])))
+  check('a symlink is rejected when the platform allows one', !out.sweep.some((x) => x.key === link), JSON.stringify(out.sweep.map((x) => x.path)))
+  await rm(dir, { recursive: true, force: true })
+}
+
 check('_internal exposes the pieces the host uses', typeof _internal.describeSession === 'function' && typeof _internal.candidatesOf === 'function')
 
 console.log(fails.length ? '\nFAIL\n- ' + fails.join('\n- ') : '\ndeep pass OK')

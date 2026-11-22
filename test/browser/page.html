@@ -129,6 +129,25 @@
       return
     }
 
+    // A second tab cleaned these rows first: click 一键清理 and confirm, then
+    // leave the toast on screen so a DOM dump can read what it says.
+    if (mode === 'clean') {
+      const tab = await waitFor(() => byText('扫描结果'))
+      if (tab) tab.click()
+      await tick(400)
+      const go = await waitFor(() => byText('一键清理'))
+      if (!go) { document.title = 'clean=no-button'; return }
+      go.click(); document.title = 'clean=confirm-open'
+      await tick(500)
+      const yes = await waitFor(() => document.querySelector('[role="dialog"] [data-kind="primary"]'), 4000)
+      if (!yes) { document.title = 'clean=no-confirm'; return }
+      yes.click(); document.title = 'clean=clicked-confirm'
+      await waitFor(() => byText('没有文件被移动') || byText('已移到回收站') || byText('这份列表在别处刷新过'), budget)
+      window.__step = 'settled'
+      while (Date.now() < deadline) await tick(150)
+      return
+    }
+
     if (mode === 'trash') {
       const tab = await waitFor(() => byText('回收站'))
       if (!tab) { window.__step = 'trash tab missing'; return }

@@ -123,3 +123,10 @@ chrome --headless=new --window-size=1180,1500 --virtual-time-budget=16000 \
   于是先 `rm -rf` 删掉文件、再回 `404 that batch is already gone`——用户看到的是「删除失败」，磁盘却已经空了。
   现在 `existed` 只由 `stat` 决定，清单坏了就数目录里的文件当 `count`；`rm` 因文件被占用而失败时返回
   `409 BATCH_IN_USE`（「批次里有文件正被别的程序占用」），不再把系统错误原文抛给用户。
+
+- **29 · 模型复核清理之后，深度页签还在列出那些文件**：`/delete` 与 `/restore` 都做了 `deepPlanAt = 0`，
+  唯独 `/review` 的 `extraAuto` 分支只调了 `noteDiskChanged()`（它当时只重置报告时间）。于是模型刚清掉的文件，
+  60 秒内仍会出现在「深度清理」的待分析列表里，用户点下去只会得到一连串 `refused`。
+  现在 `noteDiskChanged()` 自己负责让计划失效，三个分支共用一处；并且 `/deep/plan` 的响应带上
+  `cached` / `plannedAt`，自测步骤 `planStale` 可以直接断言「变动之后计划被重算」。
+  反向验证：把这一行去掉再跑，`{"invalidated": false, "cached": true}`；恢复后 `{"invalidated": true, "cached": false}`。

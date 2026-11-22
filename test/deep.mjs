@@ -6,7 +6,7 @@
  *   node test/deep.js
  */
 
-import { runDeep, planDeep, parseReply, buildDigest, estimateTokens, _internal } from '../lib/deep.js'
+import { runDeep, planDeep, parseReply, buildDigest, estimateTokens, forgetRestored, _internal } from '../lib/deep.js'
 
 // DSH's host runtime has AbortController; a bare node 14 does not. Shim it so
 // this test can run under the oldest node the package claims to support.
@@ -252,6 +252,24 @@ check('cancelling still lets the in-flight calls finish', pooled.results.size ==
   check('a non-temporary path is downgraded to 可选', out.optional.length >= 1 && out.optional[0].tier === 'unsure', JSON.stringify(out.optional.map((x) => [x.path, x.tier])))
   check('a symlink is rejected when the platform allows one', !out.sweep.some((x) => x.key === link), JSON.stringify(out.sweep.map((x) => x.path)))
   await rm(dir, { recursive: true, force: true })
+}
+
+{
+  // Restoring a file must take it off the page, or the next clean click would
+  // move it straight back into the bin.
+  const row = { items: [{ key: 'd:\\a\\x.mjs' }, { key: 'd:\\a\\y.mjs' }] }
+  const job = { order: ['s1'], sessions: new Map([['s1', row]]) }
+  const deep = {
+    sweep: [{ key: 'd:\\a\\x.mjs' }, { key: 'd:\\a\\y.mjs' }],
+    optional: [{ key: 'd:\\a\\x.mjs' }],
+    byKey: new Map([['d:\\a\\x.mjs', {}], ['d:\\a\\y.mjs', {}]]),
+  }
+  forgetRestored(deep, job, ['D:\\a\\x.mjs'])
+  check('a restored file leaves the deep buckets', deep.sweep.length === 1 && deep.optional.length === 0 &&
+    deep.sweep[0].key === 'd:\\a\\y.mjs', JSON.stringify(deep.sweep))
+  check('a restored file leaves the job row', row.items.length === 1 && row.items[0].key === 'd:\\a\\y.mjs', JSON.stringify(row.items))
+  check('a restored file leaves the key map', !deep.byKey.has('d:\\a\\x.mjs') && deep.byKey.has('d:\\a\\y.mjs'))
+  check('restoring something else changes nothing', forgetRestored(deep, job, ['D:\\other.mjs']) === deep && deep.sweep.length === 1)
 }
 
 check('_internal exposes the pieces the host uses', typeof _internal.describeSession === 'function' && typeof _internal.candidatesOf === 'function')

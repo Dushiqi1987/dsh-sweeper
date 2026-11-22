@@ -39,6 +39,8 @@ check('trash lives under DSH_HOME', normKey(trashRoot()).startsWith(normKey(proc
 
 const restored = await restore(batch.batch.id)
 check('restore puts both back', restored.restored === 2, 'restored=' + restored.restored)
+check('restore names the files it put back', Array.isArray(restored.restoredPaths) && restored.restoredPaths.length === 2,
+  JSON.stringify(restored.restoredPaths))
 check('the bytes survive the round trip', (await readFile(fileA, 'utf8')) === payload)
 check('a fully restored batch disappears from the list', (await listBatches()).length === 0)
 

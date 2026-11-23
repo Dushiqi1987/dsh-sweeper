@@ -192,3 +192,14 @@ chrome --headless=new --window-size=1180,1500 --virtual-time-budget=16000 \
   但整段是 `try { … } catch { /* best effort */ }`——服务缺失或抛错时集合为空，**正在跑的对话也会被
   当成闲置**发给模型，既花 token 又与「只分析一周没用的对话」的承诺相悖。现在服务缺失或列不出来
   直接抛错：「读不到正在运行的对话列表，分不清哪段是闲置的，这次先不动」，页面走中文映射、不移动任何文件。
+
+- **41 · 在 Linux/macOS 上「不许动 DSH 自己的文件」这条保护是空的**：`lib/trash.js` 里有一个局部
+  `norm = (p) => p.replace(/\//g,'\\').toLowerCase()`，把路径统一改成 Windows 形状再比较。Windows 上看不出
+  问题，但在 POSIX 上 `normKey()` 认不出反斜杠开头的绝对路径（`isAbsPath` 返回 false → `normKey` 返回
+  null），`isInside()` 于是恒为 false——`DSH_HOME` 与 `~/.agents` 里的文件在 `rejectionReason()` 里
+  根本不会被拒绝。现在删掉这个局部函数，统一用 `lib/paths.js` 的平台感知 `normKey()`，
+  `protectedRoots()` 也走同一个函数；`test/trash.mjs` 增加两条断言（`DSH_HOME` 内必拒、`~/.agents`
+  内必拒），这两条在旧代码的 Linux CI 上会红。
+- **42 · 损坏批次的文件计数会顺着符号链接走**：`countFiles()` 用 `stat()`（跟随链接）递归，
+  批次目录里若有一个指向外部大目录的链接，计数会跑进那个目录里。改成 `lstat()`，跳过符号链接、
+  只数普通文件与目录——损坏批次列表里显示的数字与「彻底删除」时真正删掉的一致。

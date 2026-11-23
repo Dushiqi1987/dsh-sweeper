@@ -13,7 +13,7 @@ import { keyOf } from './helpers.mjs'
 const root = await mkdtemp(join(tmpdir(), 'dsh-sweeper-trash-'))
 process.env.DSH_HOME = join(root, 'home')
 
-const { quarantine, restore, purge, listBatches, trashRoot } = await import('../lib/trash.js')
+const { quarantine, restore, purge, listBatches, trashRoot, rejectionReason } = await import('../lib/trash.js')
 const { normKey } = await import('../lib/paths.js')
 
 const fails = []
@@ -85,6 +85,18 @@ await purge(twice.batch.id)
 const second = await purge(twice.batch.id)
 check('purging the same batch twice answers missing the second time',
   second.purged === false && second.missing === true, JSON.stringify(second))
+
+// The protected-root check compared with a Windows-shaped normaliser, so on a
+// POSIX host `DSH_HOME` never matched and its files were not refused at all.
+{
+  const inside = join(process.env.DSH_HOME, 'session-state.json')
+  await writeFile(inside, 'state')
+  const reason = await rejectionReason(inside)
+  check('a file inside DSH_HOME is refused', reason === 'inside DSH state', 'reason=' + reason)
+  const agents = join(process.env.HOME || process.env.USERPROFILE || tmpdir(), '.agents', 'note.md')
+  const reason2 = await rejectionReason(agents)
+  check('a path in ~/.agents is refused too', /inside DSH state|gone/.test(String(reason2)), 'reason=' + reason2)
+}
 
 await rm(root, { recursive: true, force: true })
 console.log(fails.length ? '\nFAIL\n- ' + fails.join('\n- ') : '\ntrash OK')

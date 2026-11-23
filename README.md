@@ -170,6 +170,8 @@ node test/browser/check.mjs        # 需要本机有 Chrome/Edge，或 CHROME=<p
   且不带 Markdown 星号；批次在别处被删掉时弹窗自己关闭，不留一个点不动的确认框。
 - **提示文案有契约**：服务端能返回的每一条错误/原因都必须有中文映射，`test/messages.mjs` 会逐条
   比对 `REASONS` 表；漏一条 CI 就红，页面上不会再出现半句英文。
+- **worktree 也算仓库**：`.git` 是文件（worktree / submodule）时同样按仓库处理，里面被跟踪的文件
+  不会变成候选——只有 `.git` 是目录才算仓库，曾让整个 worktree 的源码暴露在清理列表里。
 - **保护根在哪个平台都生效**：拒绝清单（`DSH_HOME`、`~/.agents`、回收站自身）用平台感知的
   `normKey()` 比较；曾经这里是 Windows 形状的局部实现，在 POSIX 上那条保护等于没写。
 - **读不全会说**：一段对话的事件超过 20 万条时只读前面一部分，摘要里会写明这一点，会话行显示

@@ -203,3 +203,10 @@ chrome --headless=new --window-size=1180,1500 --virtual-time-budget=16000 \
 - **42 · 损坏批次的文件计数会顺着符号链接走**：`countFiles()` 用 `stat()`（跟随链接）递归，
   批次目录里若有一个指向外部大目录的链接，计数会跑进那个目录里。改成 `lstat()`，跳过符号链接、
   只数普通文件与目录——损坏批次列表里显示的数字与「彻底删除」时真正删掉的一致。
+
+- **43 · worktree 里被 git 跟踪的文件会被当成可删**：`findRepo()` 只认「`.git` 是目录」，而
+  `git worktree` 与 submodule 的 `.git` 是一个**文件**。于是那些目录被判定为「不是仓库」，
+  `gitTracked()` 返回 `norepo`，扫描把目录里被跟踪的源码当成未跟踪候选——用户正是用 worktree 在跑
+  AI 改代码的场景。现在只要 `statSync(dir/.git)` 能拿到东西就算仓库根（文件或目录都行），
+  `git -C <worktree> ls-files` 本来就能正常工作。新增 `test/scan.mjs` 四条断言（tracked / untracked /
+  norepo / worktree），反向验证：把 `isDirectory()` 加回去，worktree 那条立刻报 `result=norepo`。

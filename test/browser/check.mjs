@@ -89,6 +89,7 @@ try {
   const deepDom = await dumpDom(`http://127.0.0.1:${PORT}/?mode=tab&tab=deep&stop=2000`)
   const deepText = deepDom.replace(/<script[\s\S]*?<\/script>/g, '').replace(/<!--[\s\S]*?-->/g, '')
   ok(/另有 12 个没发送给模型/.test(deepText), 'the deep row admits the candidates it did not send')
+  ok(/日志过长，只读了前面一部分/.test(deepText), 'a very long log says it was only read in part')
 
   // Empty walkthrough: with nothing to clean the page must say one thing, not
   // two empty sections sitting under a "it is clean" card.

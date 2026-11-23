@@ -162,3 +162,12 @@ chrome --headless=new --window-size=1180,1500 --virtual-time-budget=16000 \
   回放验证：`LOST=1` 的服务让 `/deep/status` 回 `{ job: null }`，断言页面出现「后台已经没有这次
   分析的记录」且不再显示「分析中…」；把守卫改回 `if (false)` 则断言 FAIL。
 
+- **36 · 失败提示半中半英**：`humanReason()` 只覆盖了部分服务端文案。一次「文件在扫描后被改过」的失败
+  在页面上显示成 `清理失败：changed size since the scan`——最需要说清楚的那一屏，混着英文。
+  统计后发现 45 条服务端消息里有 **28 条没有中文映射**（含 `copy was incomplete; put back`、
+  `tracked by git`、`no model route: …`、`sessionPersistence service is not available` 等）。
+  全部补齐，并新增 `test/messages.mjs`：从 `lib/client.js` 里按括号配对取出 `REASONS` 表，
+  再把 `lib/*.js` 里所有 `fail(...)` / `throw new Error(...)` / `reason: '...'` 的文案逐条喂进去，
+  没有命中任何一条就失败。反向验证：删掉 `copy was incomplete` 那条，测试立刻报
+  `✗ unmapped: copy was incomplete; put back`。CI 里也加上了这一步。
+

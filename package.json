@@ -1,6 +1,6 @@
 {
   "name": "dsh-sweeper",
-  "version": "1.3.21",
+  "version": "1.3.22",
   "private": true,
   "type": "module",
   "description": "清理对话留下的临时文件与垃圾，释放磁盘空间；只报告，清理进回收站可恢复 (cleanup junk files conversations leave on disk, free up space)",

@@ -171,3 +171,13 @@ chrome --headless=new --window-size=1180,1500 --virtual-time-budget=16000 \
   没有命中任何一条就失败。反向验证：删掉 `copy was incomplete` 那条，测试立刻报
   `✗ unmapped: copy was incomplete; put back`。CI 里也加上了这一步。
 
+- **37 · 模型复核只看了前 100 条，页面却说「看过 N 条」**：`review()` 有 `MAX_ITEMS = 100`，超出的候选
+  根本不发送，`skipped` 只在没有清单外文件时才作为副文案出现，而且写的是「N 条未提交」——看起来像
+  网络问题。用户会以为整份报告都被模型过了一遍。现在结尾卡片的副文案固定为
+  「报告共 19 条，只发送了前 7 条」，压缩的回放断言会验证这句话（`test/browser/check.mjs`）。
+- **38 · 深度清理每段对话只发前 40 个候选**：`candidatesOf()` 用 `slice(0, MAX_CANDIDATES)` 截断，
+  被截掉的部分既不告诉用户也不告诉模型。现在候选数组带上不可枚举的 `hidden` 计数，
+  `planDeep` 写进会话行、`planView` 写进 totals，页面行显示「5 个文件（另有 12 个没发送给模型）」，
+  digest 里也告诉模型「清单只列了前 40 个；这段对话还有 N 个临时文件没有列出来」。
+  两处都做了反向验证：把 `hidden` 从 fixtures 里去掉、把 `skipped` 改回 0，两条断言立刻变红。
+

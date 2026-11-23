@@ -130,3 +130,11 @@ chrome --headless=new --window-size=1180,1500 --virtual-time-budget=16000 \
   现在 `noteDiskChanged()` 自己负责让计划失效，三个分支共用一处；并且 `/deep/plan` 的响应带上
   `cached` / `plannedAt`，自测步骤 `planStale` 可以直接断言「变动之后计划被重算」。
   反向验证：把这一行去掉再跑，`{"invalidated": false, "cached": true}`；恢复后 `{"invalidated": true, "cached": false}`。
+
+- **30 · 回放用的假接口和真接口悄悄分叉**：`test/browser/server.mjs` 里的 REPORT/SWEEP 是手写的。
+  真响应多出 `item.ageDays`、`stats.candidates` 这类字段，假数据没有也照样渲染成功——截图漂亮，
+  但那一栏从来没被真正渲染过一次，属于「假绿」。现在把 fixtures 拆到 `test/browser/fixtures.mjs`，
+  用宿主自测带出来的真实响应（`captureReport` → `test/browser/sample.json`）做契约测试：
+  页面读到的每个字段都必须在 fixtures 里存在。反向验证：从 ITEM 里删掉 `ageDays`，
+  测试立刻报 `[ageDays]`；恢复后通过。
+

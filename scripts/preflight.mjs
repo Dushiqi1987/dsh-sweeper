@@ -18,7 +18,7 @@ const here = dirname(fileURLToPath(import.meta.url))
 const root = dirname(here)
 
 // Files that call into fs / compare keys. Add a file here when it starts doing so.
-const FILES = ['test/deep.mjs', 'test/trash.mjs', 'test/paths.mjs']
+const FILES = ['test/deep.mjs', 'test/trash.mjs', 'test/paths.mjs', 'test/scan.mjs']
 
 const FS_CALL = /\b(?:writeFile|readFile|appendFile|mkdir|mkdtemp|rm|rmSync|unlink|symlink|statSync|lstatSync|existsSync|quarantine|restore|purge|scan|planDeep|vetDeepResult|candidatesOf)\b/
 

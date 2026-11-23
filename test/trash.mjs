@@ -98,6 +98,18 @@ check('purging the same batch twice answers missing the second time',
   check('a path in ~/.agents is refused too', /inside DSH state|gone/.test(String(reason2)), 'reason=' + reason2)
 }
 
+// A malformed batch id used to surface as a 500, which reads like a server
+// fault and invites a retry that can never work.
+{
+  const statusOf = async (fn) => { try { await fn(); return 0 } catch (e) { return (e && e.status) || 0 } }
+  check('restoring a malformed batch id is a client error',
+    (await statusOf(() => restore('nope'))) === 400)
+  check('purging a malformed batch id is a client error',
+    (await statusOf(() => purge('nope'))) === 400)
+  check('quarantining nothing is a client error',
+    (await statusOf(() => quarantine([]))) === 400)
+}
+
 await rm(root, { recursive: true, force: true })
 console.log(fails.length ? '\nFAIL\n- ' + fails.join('\n- ') : '\ntrash OK')
 process.exitCode = fails.length ? 1 : 0

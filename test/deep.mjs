@@ -215,9 +215,12 @@ check('cancelling still lets the in-flight calls finish', pooled.results.size ==
   check('a short log is not marked truncated', whole.truncated === false && whole.events.length === 3, JSON.stringify({ t: whole.truncated, n: whole.events.length }))
 
   let liveCode = ''
+  let liveStatus = 0
   const noLive = { get: (n) => (n === 'sessionPersistence' ? { list: async () => [] } : undefined) }
-  try { await planDeep(noLive, { week: 7, now: Date.now() }) } catch (e) { liveCode = (e && e.message) || '' }
-  check('planning without a live-session list fails closed', /session service is not available/.test(liveCode), 'message=' + liveCode)
+  try { await planDeep(noLive, { week: 7, now: Date.now() }) } catch (e) { liveCode = (e && e.message) || ''; liveStatus = (e && e.status) || 0 }
+  check('planning without a live-session list fails closed',
+    /session service is not available/.test(liveCode) && liveStatus === 503,
+    'status=' + liveStatus + ' message=' + liveCode)
 
   const broken = { open: async () => { throw new Error('cannot open') } }
   let code = ''

@@ -202,6 +202,23 @@ check('cancelling still lets the in-flight calls finish', pooled.results.size ==
   const none = await _internal.describeSession({}, empty, { header: { id: 'session-b' } })
   check('a log with no events yields null', none === null)
 
+  // A very long conversation cannot be read whole; the cap has to be visible,
+  // otherwise the digest silently describes only the opening of it.
+  const page = Array.from({ length: 2000 }, (_, i) => ({ type: 'step/end', time: i }))
+  const long = { read: async (off) => ({ events: off ? [] : page }) }
+  const capped = await _internal.readAll(long, 10)
+  check('a log over the read cap is marked truncated', capped.truncated === true, 'truncated=' + capped.truncated)
+  check('the read cap still returns the pages it read', capped.events.length === 2000, 'events=' + capped.events.length)
+
+  const short = { read: async (off) => ({ events: off ? [] : page.slice(0, 3) }) }
+  const whole = await _internal.readAll(short, 10)
+  check('a short log is not marked truncated', whole.truncated === false && whole.events.length === 3, JSON.stringify({ t: whole.truncated, n: whole.events.length }))
+
+  let liveCode = ''
+  const noLive = { get: (n) => (n === 'sessionPersistence' ? { list: async () => [] } : undefined) }
+  try { await planDeep(noLive, { week: 7, now: Date.now() }) } catch (e) { liveCode = (e && e.message) || '' }
+  check('planning without a live-session list fails closed', /session service is not available/.test(liveCode), 'message=' + liveCode)
+
   const broken = { open: async () => { throw new Error('cannot open') } }
   let code = ''
   try { await _internal.describeSession({}, broken, { header: { id: 'session-c' } }) } catch (e) { code = e.code }

@@ -28,7 +28,7 @@ export const REPORT = {
 }
 
 export const SESSIONS = [
-  { id: 'session-1e39c0aa', title: 'P4b mock launch', cwd: 'D:\\OpenFuture', ageDays: 12, toolCalls: 61, candidates: 5, hidden: 12, estTokens: 994 },
+  { id: 'session-1e39c0aa', title: 'P4b mock launch', cwd: 'D:\\OpenFuture', ageDays: 12, toolCalls: 61, candidates: 5, hidden: 12, truncated: true, estTokens: 994 },
   { id: 'session-aa8200b1', title: 'ICCV figure export', cwd: 'C:\\Users\\demo\\Desktop\\iccv', ageDays: 21, toolCalls: 130, candidates: 3, estTokens: 1180 },
   { id: 'session-458d1c02', title: 'v02a UI smoke', cwd: 'D:\\OpenFuture', ageDays: 8, toolCalls: 22, candidates: 2, estTokens: 640 },
 ]

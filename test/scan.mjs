@@ -50,6 +50,27 @@ try {
   git(repo, 'worktree', 'add', '-q', tree)
   const inWorktree = await _internal.gitTracked(join(tree, 'app.js'), new Map())
   check('a git worktree keeps the tracked file tracked', inWorktree === true, 'result=' + inWorktree)
+  // A relative mention in a log must map to the same suffix key the artefact
+  // keys use. The old code folded separators to backslashes and lowercased
+  // unconditionally, so on POSIX it never matched and a file used through a
+  // relative path was never counted as used.
+  const probe = join(repo, 'src', 'deep', 'probe.mjs')
+  const want = _internal.last2(_internal.normKey(probe))
+  check('a relative mention maps to the artefact suffix key',
+    _internal.relKey('src/deep/probe.mjs') === want,
+    _internal.relKey('src/deep/probe.mjs') + ' vs ' + want)
+  check('mixed separators map to the same key',
+    _internal.relKey('src\\deep\\probe.mjs') === want)
+  check('a bare file name is not a relative reference',
+    _internal.relKey('probe.mjs') === '')
+  if (process.platform === 'win32') {
+    check('windows folds case so a differently-cased mention still matches',
+      _internal.relKey('SRC/Deep/Probe.MJS') === want)
+  } else {
+    check('posix keeps case so a different path stays a different file',
+      _internal.relKey('SRC/Deep/Probe.MJS') !== want)
+  }
+
 } finally {
   await rm(root, { recursive: true, force: true })
 }

@@ -210,3 +210,16 @@ chrome --headless=new --window-size=1180,1500 --virtual-time-budget=16000 \
   AI 改代码的场景。现在只要 `statSync(dir/.git)` 能拿到东西就算仓库根（文件或目录都行），
   `git -C <worktree> ls-files` 本来就能正常工作。新增 `test/scan.mjs` 四条断言（tracked / untracked /
   norepo / worktree），反向验证：把 `isDirectory()` 加回去，worktree 那条立刻报 `result=norepo`。
+
+- **44 · 在 Linux/macOS 上「之后还被用过」永远数不到，脚本用完仍会被当成闲置**：`lib/scan.js`
+  把日志里出现的相对路径（如 `node .scratch/probe.mjs`）与绝对路径清单做后缀匹配时，用的是
+  `t.raw.replace(/\//g,'\\').split('\\')`——先把分隔符统一成反斜杠、再 `join('\\')`、
+  再 `.toLowerCase()`。Windows 上正好等于 `last2(normKey(...))`；POSIX 上后缀表里的键是
+  `deep/probe.mjs`，而这里算出的是 `deep\\probe.mjs`，`suffix.get(s2)` 永远 miss。后果不只是
+  「被引用 N 次」偏小：**强引用（use）也走同一条匹配**，于是在 macOS/Linux 上，一个脚本即使当天
+  被用相对路径执行过，`uses` 仍是 0、`lastUse` 停在生产时间——过了 7 天就会被判成「无脑删」。
+  现在抽出平台感知的 `relKey()`（与 `last2()` 同形：Windows 拼反斜杠并折大小写，POSIX 拼 `/`
+  且保留大小写），`test/scan.mjs` 增加四条断言（相对路径映射、混合分隔符、裸文件名不算引用、
+  Windows 折大小写 / POSIX 保留大小写），`scripts/preflight.mjs` 也把「硬编码反斜杠 split/join」
+  这条规则从测试文件扩展到 `lib/`（新增 `LIB_FILES` 扫描，反向验证：往 `lib/deep.js` 塞一行
+  `.split('\\').join('/')`，守卫立刻报 `no-assumed-separator` 并以 1 退出）。

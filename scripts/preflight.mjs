@@ -49,6 +49,11 @@ const RULES = [
   },
 ]
 
+// Library files worth checking too, but only for the separator rule: their
+// .toLowerCase() calls are about extensions, hostnames and uuids, not keys.
+const LIB_FILES = ['lib/scan.js', 'lib/deep.js', 'lib/trash.js', 'lib/index.js', 'lib/review.js']
+const SEPARATOR = RULES.filter((r) => r.id === 'no-assumed-separator')
+
 const problems = []
 for (const rel of FILES) {
   const file = join(root, rel)
@@ -65,6 +70,19 @@ for (const rel of FILES) {
   })
 }
 
+for (const rel of LIB_FILES) {
+  const file = join(root, rel)
+  let text = ''
+  try { text = readFileSync(file, 'utf8') } catch { continue }
+  text.split(/\r?\n/).forEach((line, i) => {
+    if (/^\s*(\/\/|\*)/.test(line)) return
+    for (const rule of SEPARATOR) {
+      if (!rule.re.test(line)) continue
+      problems.push(`${rel}:${i + 1} [${rule.id}] ${line.trim()}\n    ${rule.why}`)
+    }
+  })
+}
+
 if (problems.length) {
   console.error('cross-platform guards failed:\n')
   for (const p of problems) console.error('  ' + p + '\n')
@@ -72,4 +90,4 @@ if (problems.length) {
   process.exit(1)
 }
 
-console.log(`cross-platform guards OK (${FILES.length} files scanned)`)
+console.log(`cross-platform guards OK (${FILES.length} test files + ${LIB_FILES.length} lib files)`)

@@ -9,6 +9,9 @@
 import { runDeep, planDeep, parseReply, buildDigest, estimateTokens, forgetRestored, _internal } from '../lib/deep.js'
 import { normKey, joinPath } from '../lib/paths.js'
 import { cand as candFixture, keyOf } from './helpers.mjs'
+import fs from 'node:fs'
+import fsPath from 'node:path'
+import os from 'node:os'
 
 // DSH's host runtime has AbortController; a bare node 14 does not. Shim it so
 // this test can run under the oldest node the package claims to support.
@@ -280,6 +283,28 @@ check('cancelling still lets the in-flight calls finish', pooled.results.size ==
   check('a restored file leaves the key map', !deep.byKey.has(kx) && deep.byKey.has(ky))
   const untouched = joinPath(root, 'other.mjs')
   check('restoring something else changes nothing', forgetRestored(deep, job, [untouched]) === deep && deep.sweep.length === 1)
+}
+
+// ── candidate cap is reported, not silent ───────────────────────────────────
+{
+  const dir = fs.mkdtempSync(fsPath.join(os.tmpdir(), 'sweeper-cap-'))
+  const root = fsPath.join(dir, '.scratch')
+  fs.mkdirSync(root)
+  for (let i = 0; i < 45; i++) {
+    const f = fsPath.join(root, 'probe-' + i + '.mjs')
+    fs.writeFileSync(f, 'x'.repeat(16))
+    const t = new Date(Date.now() - 30 * 864e5)
+    fs.utimesSync(f, t, t)
+  }
+  const info = { title: 'cap', cwd: dir, createdAt: Date.now() - 40 * 864e5, lastTime: Date.now() - 20 * 864e5,
+    toolCalls: 5, tools: {}, errors: 0, firstAsk: 'x', lastAnswer: 'y', tail: [], spill: [],
+    artifacts: Array.from({ length: 45 }, (_, i) => ({ path: fsPath.join(root, 'probe-' + i + '.mjs'), tool: 'write', time: 1 })) }
+  const got = _internal.candidatesOf(info, {})
+  check('candidates are capped at 40', got.length === 40, String(got.length))
+  check('the cap reports how many were left out', got.hidden === 5, String(got.hidden))
+  const digest = buildDigest(info, got, Date.now())
+  check('the digest tells the model the list is partial', digest.includes('还有 5 个临时文件没有列出来'))
+  fs.rmSync(dir, { recursive: true, force: true })
 }
 
 check('_internal exposes the pieces the host uses', typeof _internal.describeSession === 'function' && typeof _internal.candidatesOf === 'function')

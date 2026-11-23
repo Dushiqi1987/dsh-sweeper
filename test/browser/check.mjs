@@ -80,6 +80,15 @@ try {
   ok(/待你决定|待你确认/.test(dom), 'the asking card is still there after the refresh')
   const text = dom.replace(/<script[\s\S]*?<\/script>/g, '').replace(/<!--[\s\S]*?-->/g, '')
   ok(!/undefined|NaN|\(\s*\)/.test(text), 'no blank, undefined or NaN cells')
+  // The model only ever reads the first 100 candidates. Saying "reviewed 7"
+  // while the report held 19 reads as "everything was checked".
+  ok(/报告共 \d+ 条，只发送了前 \d+ 条/.test(text), 'a truncated review says how many candidates were never sent')
+
+  // Same rule for the deep pass: 40 candidates per conversation is the cap,
+  // and the row must admit the rest were not sent.
+  const deepDom = await dumpDom(`http://127.0.0.1:${PORT}/?mode=tab&tab=deep&stop=2000`)
+  const deepText = deepDom.replace(/<script[\s\S]*?<\/script>/g, '').replace(/<!--[\s\S]*?-->/g, '')
+  ok(/另有 12 个没发送给模型/.test(deepText), 'the deep row admits the candidates it did not send')
 
   // Empty walkthrough: with nothing to clean the page must say one thing, not
   // two empty sections sitting under a "it is clean" card.

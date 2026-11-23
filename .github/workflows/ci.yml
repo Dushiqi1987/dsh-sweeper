@@ -42,7 +42,7 @@ jobs:
         run: node scripts/preflight.mjs
 
       - name: Path rules, deep-clean pool, quarantine bookkeeping, message coverage
-        run: node test/paths.mjs && node test/deep.mjs && node test/trash.mjs && node test/messages.mjs
+        run: node test/paths.mjs && node test/deep.mjs && node test/trash.mjs && node test/messages.mjs && node test/market-listing.mjs
 
       # The replay server's fixtures are hand-written. If they drift from a real
       # response, the browser check still passes — it just never renders the

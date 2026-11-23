@@ -3,6 +3,7 @@
 [![CI](https://github.com/Dushiqi1987/dsh-sweeper/actions/workflows/ci.yml/badge.svg)](https://github.com/Dushiqi1987/dsh-sweeper/actions/workflows/ci.yml)
 [![license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
+清理对话留下的临时文件、缓存与垃圾，释放磁盘空间（常被叫作「清理内存」，实际清理的是磁盘上的文件，不动进程内存）。
 静态扫描历史会话里的工具产物，分两档展示；你自己勾选，点「清理选中」批量移到插件回收站，可随时恢复。
 
 ## 怎么用
@@ -263,3 +264,13 @@ REAL=1 PORT=8737 node test/browser/server.mjs
 | 回收站读取 | 回收站错误卡 + 「重试」，统计卡显示 `—`（不假装是空的） |
 
 回放服务可以用 `FAIL=report,deep,trash,start` 复现这些状态。
+
+## 在插件商店里被搜到
+
+商店的搜索（`dshmarket` 的 `pluginRelevance`）只匹配四类字段：包名、作者、**描述**、分类——**没有 keywords 字段**。
+所以「清理内存」「清理对话」「清理垃圾」「释放空间」这些词必须写进描述里，否则搜不到。
+
+`data/entry.yml` 是商店条目的副本，`test/market-listing.mjs` 用商店同一套归一化规则
+（`searchText` + 同字段内全部 token 命中）回放 22 个常见查询，少一个词 CI 就红。
+当前：改动前 3/22 可达，改动后 22/22。
+

@@ -145,6 +145,7 @@ const cases = [
   ['deepDialog', { status: 'ready', report, tab: 'deep', deepPlan, deepJob, dialog: { kind: 'deepDelete', keys: ['dk1', 'dk3'], count: 2, bytes: 8912, unsure: 1 } }],
   ['deepSkip', { status: 'ready', report, tab: 'deep', deepPlan: { week: 7, concurrency: 4, totalEstTokens: 0, skipped: 9, sessions: [] } }],
   ['deepSkip2', { status: 'ready', report, tab: 'deep', deepPlan: { ...deepPlan, skipped: 9 } }],
+  ['deepLost', { status: 'ready', report, tab: 'deep', deepPlan, deepJob: { ...deepJob, state: 'lost' }, deepErr: '后台已经没有这次分析的记录（DSH 可能重启过），返回的结果不会自己回来。' }],
 ]
 
 let failed = 0

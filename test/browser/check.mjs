@@ -114,6 +114,25 @@ try {
   const purgeText = purgeDom.replace(/<script[\s\S]*?<\/script>/g, '').replace(/<!--[\s\S]*?-->/g, '')
   ok(/无法恢复/.test(purgeText), 'the purge dialog warns that it cannot be undone')
   ok(!/\*\*/.test(purgeText), 'the purge dialog shows no raw markdown')
+
+  // A restarted host forgets the job. The panel must say so instead of sitting
+  // on "分析中…" with a frozen bar forever.
+  const lostServer = spawn(process.execPath, [path.join(here, 'server.mjs')], {
+    env: { ...process.env, PORT: String(PORT + 2), LOST: '1' },
+    stdio: ['ignore', 'pipe', 'pipe'],
+  })
+  let lostReady = false
+  lostServer.stdout.on('data', (b) => { if (String(b).includes('ready http')) lostReady = true })
+  try {
+    for (let i = 0; i < 50 && !lostReady; i++) await wait(100)
+    if (!lostReady) throw new Error('lost replay server did not start')
+    const lostDom = await dumpDom(`http://127.0.0.1:${PORT + 2}/?mode=deep&stop=5000`)
+    const lostText = lostDom.replace(/<script[\s\S]*?<\/script>/g, '').replace(/<!--[\s\S]*?-->/g, '')
+    ok(/后台已经没有这次分析的记录/.test(lostText), 'a vanished job is reported, not spun forever')
+    ok(!/分析中…/.test(lostText), 'the lost job is no longer shown as running')
+  } finally {
+    lostServer.kill()
+  }
 } catch (e) {
   fails.push(String(e && e.message ? e.message : e))
   console.log('FAIL ' + e.message)

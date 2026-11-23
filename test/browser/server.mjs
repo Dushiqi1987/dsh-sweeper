@@ -13,6 +13,7 @@ import path from 'node:path'
 const here = path.dirname(fileURLToPath(import.meta.url))
 // The page's ?stale= is remembered: the delete POST carries no query of its own.
 let STALE = process.env.STALE || ''
+const LOST = process.env.LOST || ''
 const root = path.resolve(here, '..')             // test/
 const repo = path.resolve(here, '..', '..')       // package root
 
@@ -161,7 +162,12 @@ const server = http.createServer(async (req, res) => {
     const est = (REAL ? realSessions : SESSIONS).reduce((a, s) => a + (s.estTokens || 0), 0)
     return json(res, 202, { jobId: 'job-harness', sessions: n, estTokens: est, concurrency: 4 })
   }
-  if (p === '/plugins/dsh-sweeper/deep/status') return json(res, 200, { job: start ? status() : null })
+  // LOST=1 simulates the host forgetting a running job — exactly what happens
+  // after a DSH restart, which is also what a plugin reload is.
+  if (p === '/plugins/dsh-sweeper/deep/status') {
+    if (LOST === '1' && start) return json(res, 200, { job: null })
+    return json(res, 200, { job: start ? status() : null })
+  }
   if (p === '/plugins/dsh-sweeper/deep/cancel') return json(res, 200, { ok: true })
   // Stale-tab walkthrough: `?stale=gone` answers a delete with every row
   // refused (another tab cleaned them first), `?stale=409` answers with the

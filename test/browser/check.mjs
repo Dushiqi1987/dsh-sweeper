@@ -107,6 +107,13 @@ try {
   const trashText = trashDom.replace(/<script[\s\S]*?<\/script>/g, '').replace(/<!--[\s\S]*?-->/g, '')
   ok(/模型建议/.test(trashText), 'a model-proposal batch is labelled in Chinese')
   ok(!/model proposal/.test(trashText), 'no raw English note leaks into the bin')
+
+  // The permanent-delete dialog used to ship literal markdown (**无法恢复**),
+  // which renders as two asterisks around the most important word on screen.
+  const purgeDom = await dumpDom(`http://127.0.0.1:${PORT}/?mode=purge&stop=3000`)
+  const purgeText = purgeDom.replace(/<script[\s\S]*?<\/script>/g, '').replace(/<!--[\s\S]*?-->/g, '')
+  ok(/无法恢复/.test(purgeText), 'the purge dialog warns that it cannot be undone')
+  ok(!/\*\*/.test(purgeText), 'the purge dialog shows no raw markdown')
 } catch (e) {
   fails.push(String(e && e.message ? e.message : e))
   console.log('FAIL ' + e.message)

@@ -67,5 +67,19 @@ const paths = [REPORT.trashRoot].concat(REPORT.items.map((i) => i.path))
 const doubled = paths.filter((p) => typeof p === 'string' && p.includes('\\\\'))
 check('fixture paths are not double-escaped', doubled.length === 0, doubled.join(' | '))
 
+// Every quarantine note the server can write must have a Chinese label, or the
+// bin shows an English chip for that batch (which is how "model proposal" and
+// "manual selection" slipped through).
+const server = await readFile(new URL('../lib/index.js', import.meta.url), 'utf8')
+const notes = new Set()
+for (const m of server.matchAll(/note:\s*'([^']+)'/g)) notes.add(m[1])
+for (const m of server.matchAll(/\?\s*'(deep review|model proposal|manual selection)'/g)) notes.add(m[1])
+const labelBlock = (client.match(/const NOTE_LABELS = \{([\s\S]*?)\}/) || [])[1] || ''
+const labelled = new Set([...labelBlock.matchAll(/(?:^|[\s,{])(?:'([^']+)'|([a-z]+))\s*:/g)]
+  .map((m) => m[1] || m[2]))
+const unlabelled = [...notes].filter((n) => !labelled.has(n))
+check('every quarantine note has a Chinese label', unlabelled.length === 0,
+  unlabelled.join(',') + (notes.size ? '' : ' (no notes found)'))
+
 console.log(fails.length ? '\nFAIL\n- ' + fails.join('\n- ') : '\ncontract OK')
 process.exitCode = fails.length ? 1 : 0

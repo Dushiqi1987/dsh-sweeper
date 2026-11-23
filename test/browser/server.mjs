@@ -143,6 +143,7 @@ const server = http.createServer(async (req, res) => {
     batches: [
       { id: 'mreplay1-aaaaaa', count: 5, bytes: 11068, createdAt: 1795278403226, note: 'deep review' },
       { id: 'mreplay2-bbbbbb', count: 1, bytes: 76317, createdAt: 1795192003226, note: 'scan' },
+      { id: 'mreplay3-cccccc', count: 2, bytes: 4120, createdAt: 1795105003226, note: 'model proposal' },
     ],
   })
   }

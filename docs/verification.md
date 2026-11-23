@@ -138,3 +138,9 @@ chrome --headless=new --window-size=1180,1500 --virtual-time-budget=16000 \
   页面读到的每个字段都必须在 fixtures 里存在。反向验证：从 ITEM 里删掉 `ageDays`，
   测试立刻报 `[ageDays]`；恢复后通过。
 
+- **31 · 回收站里有英文批次标签**：服务端会写五种 `note`（`scan` / `model review` / `model proposal` /
+  `deep review` / `manual selection`），而 `NOTE_LABELS` 只覆盖了三种——模型建议与手动清理的批次
+  在回收站里显示原始英文。现在补齐，并让 `test/contract.mjs` 扫描 `lib/index.js` 里的所有 note 字面量，
+  任何一个没有中文标签就报错；回放服务也加了第三种批次，`test/browser/check.mjs` 断言页面上
+  出现「模型建议」且不出现 `model proposal`。
+

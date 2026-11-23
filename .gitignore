@@ -7,3 +7,5 @@ Thumbs.db
 
 # headless chrome scratch profile
 test/browser/.chrome-*/
+.chrome-*/
+test/browser/.chrome-*/

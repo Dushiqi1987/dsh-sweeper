@@ -35,6 +35,7 @@ for (const f of ['index', 'trash', 'scan', 'deep', 'review']) {
   const src = read('../lib/' + f + '.js')
   for (const m of src.matchAll(/fail\(\s*\d+\s*,\s*'([^']+)'/g)) messages.add(m[1])
   for (const m of src.matchAll(/throw new Error\('([^']+)'/g)) messages.add(m[1])
+  for (const m of src.matchAll(/badRequest\('([^']+)'/g)) messages.add(m[1])
   for (const m of src.matchAll(/reason:\s*'([^']+)'/g)) messages.add(m[1])
 }
 

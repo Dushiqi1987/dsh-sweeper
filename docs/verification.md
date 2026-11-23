@@ -223,3 +223,14 @@ chrome --headless=new --window-size=1180,1500 --virtual-time-budget=16000 \
   Windows 折大小写 / POSIX 保留大小写），`scripts/preflight.mjs` 也把「硬编码反斜杠 split/join」
   这条规则从测试文件扩展到 `lib/`（新增 `LIB_FILES` 扫描，反向验证：往 `lib/deep.js` 塞一行
   `.split('\\').join('/')`，守卫立刻报 `no-assumed-separator` 并以 1 退出）。
+
+- **45 · 坏的批次号报成 500，页面让用户「重试」一件永远不可能成功的事**：`lib/trash.js` 里
+  `restore()` / `purge()` 对非法 id 抛的是裸 `Error('bad batch id')`，没有 `status`；路由的兜底
+  `sendJSON(res, (err && err.status) || 500, …)` 于是回 **500**。客户端把它当服务故障，显示
+  「服务返回 500，请重试」——可是这个请求再重试一百次也一样。同一类还有 `nothing selected`、
+  `too many items in one batch`。现在 `trash.js` 用一个 `badRequest()` 把这三条带上 `status: 400`
+  （`deep.js` 里两条「读不到会话服务」改成 `503`，因为它确实是暂时不可用），客户端 `REASONS`
+  补 `bad batch id` →「这个批次号不对，页面可能过期了，点「回收站」刷新一下」。
+  `test/trash.mjs` 加三条断言（restore/purge 坏 id、quarantine 空数组都必须是 400），
+  反向验证：把 `{ status: 400 }` 换成 `{}`，三条立刻红；`test/deep.mjs` 的 fail-closed 断言
+  同步检查 `503`。`test/messages.mjs` 也把 `badRequest('…')` 纳入扫描，映射覆盖仍为 45/45。

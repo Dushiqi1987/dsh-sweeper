@@ -21,8 +21,13 @@ jobs:
         with:
           node-version: 20
           registry-url: https://registry.npmjs.org
-      - name: Guard the manifest before it leaves the machine
-        run: node scripts/selfcheck.mjs
-      - run: npm publish --provenance --access public
+      - run: node scripts/selfcheck.mjs
+      - name: Publish, unless the repository has no npm token yet
+        run: |
+          if [ -z "$NODE_AUTH_TOKEN" ]; then
+            echo "NPM_TOKEN is not configured; skipping the publish. The GitHub release is still installable."
+            exit 0
+          fi
+          npm publish --provenance --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

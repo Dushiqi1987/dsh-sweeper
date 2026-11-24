@@ -18,7 +18,8 @@ const here = dirname(fileURLToPath(import.meta.url))
 const root = dirname(here)
 
 // Files that call into fs / compare keys. Add a file here when it starts doing so.
-const FILES = ['test/deep.mjs', 'test/trash.mjs', 'test/paths.mjs', 'test/scan.mjs']
+const FILES = [
+  'test/agent.mjs','test/deep.mjs', 'test/trash.mjs', 'test/paths.mjs', 'test/scan.mjs']
 
 const FS_CALL = /\b(?:writeFile|readFile|appendFile|mkdir|mkdtemp|rm|rmSync|unlink|symlink|statSync|lstatSync|existsSync|quarantine|restore|purge|scan|planDeep|vetDeepResult|candidatesOf)\b/
 
@@ -51,7 +52,10 @@ const RULES = [
 
 // Library files worth checking too, but only for the separator rule: their
 // .toLowerCase() calls are about extensions, hostnames and uuids, not keys.
-const LIB_FILES = ['lib/scan.js', 'lib/deep.js', 'lib/trash.js', 'lib/index.js', 'lib/review.js']
+const LIB_FILES = [
+  'lib/agent.js',
+  'lib/fs-tools.js',
+  'lib/deep-agent.js','lib/scan.js', 'lib/deep.js', 'lib/trash.js', 'lib/index.js', 'lib/review.js']
 const SEPARATOR = RULES.filter((r) => r.id === 'no-assumed-separator')
 
 const problems = []

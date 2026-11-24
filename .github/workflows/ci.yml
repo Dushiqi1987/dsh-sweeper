@@ -47,6 +47,9 @@ jobs:
       # The store strip is built by the awesome-list probe from `screenshots.json`
       # at the repository root. A renamed file there fails silently (the market
       # just renders fewer tiles), so the manifest is checked here.
+      - name: Tool loop, workspace jail, discovered candidates
+        run: node test/agent.mjs
+
       - name: Store screenshots resolve
         run: node test/screenshots.mjs
 

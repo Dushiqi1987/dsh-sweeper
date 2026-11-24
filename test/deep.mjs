@@ -112,6 +112,7 @@ const sessions = ['a', 'b', 'c'].map((key) => ({
 const order = []
 const out = await runDeep(ctx, sessions, {
   concurrency: 2,
+  agent: false,
   onResult: async (job, payload) => { order.push(job.id + ':' + (payload.ok ? 'ok' : 'err')) },
 })
 check('pool ran every conversation', out.results.size === 3)
@@ -174,9 +175,13 @@ check('cancelling still lets the in-flight calls finish', pooled.results.size ==
   const fake = {
     get: (name) => (name === 'sessions' ? { list: () => [] } : name === 'sessionPersistence' ? persistence : undefined),
   }
+  // Without tools a conversation with no candidates is skipped; with tools it is
+  // planned, because looking around is how a big leftover gets found.
   const plan = await planDeep(fake, { week: 7, now: Date.now() })
   check('an unreadable log is skipped, not fatal', plan.unreadable === 1, 'unreadable=' + plan.unreadable)
-  check('the readable log still makes it into the plan', plan.sessions.length === 0, 'sessions=' + plan.sessions.length)
+  check('a candidate-less conversation is planned when tools are available', plan.sessions.length === 1, 'sessions=' + plan.sessions.length)
+  const planNoTools = await planDeep(fake, { week: 7, now: Date.now(), agent: false })
+  check('without tools a candidate-less conversation is still skipped', planNoTools.sessions.length === 0, 'sessions=' + planNoTools.sessions.length)
 }
 
 // The planner runs once per cache window and opens one handle per conversation;

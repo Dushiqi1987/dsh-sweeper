@@ -234,3 +234,18 @@ chrome --headless=new --window-size=1180,1500 --virtual-time-budget=16000 \
   `test/trash.mjs` 加三条断言（restore/purge 坏 id、quarantine 空数组都必须是 400），
   反向验证：把 `{ status: 400 }` 换成 `{}`，三条立刻红；`test/deep.mjs` 的 fail-closed 断言
   同步检查 `503`。`test/messages.mjs` 也把 `badRequest('…')` 纳入扫描，映射覆盖仍为 45/45。
+
+- **46 · 候选永远只有 KB 级：模型只能对清单说「是/否」，看不见清单外的几百 MB**。这不是模型的
+  问题，是喂给它的东西决定的：旧版把「像临时产物的文件」列成清单交给模型，而一个 900 MB 的
+  checkpoint 往往**根本没有 write 调用留下路径**（它是 `curl`、`git clone`、训练脚本自己写的），
+  所以它压根不在清单里，模型再聪明也只能对清单作答。修法是把「判断」换成一个**有界工具循环**：
+  模型先 `list_dir` 看工作目录、再 `find_files(minBytes=10 MB)` 按大小找、必要时下钻，然后才给
+  结论（`lib/agent.js` 驱动循环，`lib/fs-tools.js` 提供三个只读工具，`lib/deep-agent.js` 是提示词与
+  解析）。每段最多 6 轮 / 18 次调用，工具全部在插件进程内实现、没有 shell、realpath 校验不许越出
+  该对话的工作目录。模型给出的绝对路径要过服务端复核；**它自己找出来的文件一律进「需要你判断」**，
+  规则扫描认定的临时目录才算「无脑删」——猜错一次可能是几个 GB，值一下勾选。
+  实测（`D:\\OpenFuture` 那段闲置 10 天的对话）：4 轮 / 6 次工具调用 / 21s，13 项候选，其中
+  `182.3 MB .scratch/realdb-copy.sqlite`、`70.5 MB .scratch/beir/trec-covid.zip`、
+  `61.3 MB .android-sdk/platform.zip`、`57.1 MB .android-sdk/build-tools.zip` 全部是规则扫描看不见的。
+  `test/agent.mjs` 20 条断言覆盖工具边界与分层规则（反向验证：把 `discovered` 从 `unsure` 判据里
+  去掉，`a discovered file is never in the one-click tier` 立刻红）。

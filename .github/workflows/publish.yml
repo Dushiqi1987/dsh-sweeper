@@ -1,0 +1,28 @@
+name: publish
+
+# Publishes to npm when a GitHub release is published, so the official
+# dsh-plugin-catalog index (which needs an npm package and a version) can list
+# the plugin. Nothing publishes on ordinary pushes.
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write # provenance
+
+jobs:
+  npm:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: https://registry.npmjs.org
+      - name: Guard the manifest before it leaves the machine
+        run: node scripts/selfcheck.mjs
+      - run: npm publish --provenance --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

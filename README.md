@@ -6,6 +6,16 @@
 清理对话留下的临时文件、缓存与垃圾，释放磁盘空间（常被叫作「清理内存」，实际清理的是磁盘上的文件，不动进程内存）。
 静态扫描历史会话里的工具产物，分两档展示；你自己勾选，点「清理选中」批量移到插件回收站，可随时恢复。
 
+## 安装
+
+```bash
+# 从 GitHub Release（始终是最新版）
+dsh plugin add https://github.com/Dushiqi1987/dsh-sweeper/releases/latest/download/dsh-sweeper.tgz
+```
+
+发布到 npm 之后也可以直接 `dsh plugin add dsh-sweeper`（npm 包同时喂给官方
+`dsh-plugin-catalog` 索引，插件商店里搜得到、显示版本号）。
+
 ## 怎么用
 
 装好后，DSH 设置的左侧栏出现「清理对话垃圾」。打开它：

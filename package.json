@@ -45,12 +45,12 @@
     "./cordis.patch.yml": "./cordis.patch.yml"
   },
   "files": [
-    "lib",
-    "icon.svg",
-    "locale",
-    "cordis.patch.yml",
+    "LICENSE",
     "README.md",
-    "LICENSE"
+    "cordis.patch.yml",
+    "icon.svg",
+    "lib",
+    "locale"
   ],
   "dsh": {
     "bundle": {
@@ -68,6 +68,7 @@
     "guards": "node scripts/preflight.mjs",
     "contract": "node test/contract.mjs",
     "messages": "node test/messages.mjs",
-    "listing": "node test/market-listing.mjs"
+    "listing": "node test/market-listing.mjs",
+    "shots": "node test/screenshots.mjs"
   }
 }

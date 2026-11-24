@@ -27,7 +27,7 @@ jobs:
 
       - name: Syntax check every module
         run: |
-          for f in lib/*.js test/harness.js test/paths.mjs test/deep.mjs test/trash.mjs test/contract.mjs test/helpers.mjs test/scan.mjs test/browser/*.mjs scripts/*.mjs; do
+          for f in lib/*.js test/harness.js test/paths.mjs test/deep.mjs test/trash.mjs test/contract.mjs test/helpers.mjs test/scan.mjs test/screenshots.mjs test/browser/*.mjs scripts/*.mjs; do
             node --check "$f"
           done
 
@@ -43,6 +43,12 @@ jobs:
 
       - name: Path rules, deep-clean pool, quarantine bookkeeping, message coverage
         run: node test/paths.mjs && node test/scan.mjs && node test/deep.mjs && node test/trash.mjs && node test/messages.mjs && node test/market-listing.mjs
+
+      # The store strip is built by the awesome-list probe from `screenshots.json`
+      # at the repository root. A renamed file there fails silently (the market
+      # just renders fewer tiles), so the manifest is checked here.
+      - name: Store screenshots resolve
+        run: node test/screenshots.mjs
 
       # The replay server's fixtures are hand-written. If they drift from a real
       # response, the browser check still passes — it just never renders the
